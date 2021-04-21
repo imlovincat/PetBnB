@@ -1,0 +1,50 @@
+/* update CSS ctrl + shift + r */
+
+
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+div.top {
+    background-color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: grey;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+div.heading {
+    background-color: #258CA5;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    letter-spacing: 2px;
+	height: 100px;
+}
+
+div.middle {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.bottom {
+    background-color: #258CA5;
+    padding-top: 120px;
+    padding-bottom: 20px;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: black;
+}
+
+table.content {
+    border-spacing: 0px 0px;
+}

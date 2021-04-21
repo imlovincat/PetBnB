@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>{{ the_title }}</title>
+        <link rel="stylesheet" href="static/css/style.css">
+
+    </head>
+    <body>
+		
+		<div class="heading">
+            {{ the_opening_title }}
+        </div>
+        
+		<div class="top">
+            <a href="/">Home</a> | <a href="/login">Login</a> | <a href="/signup">Create an new account</a> | <a href="/bepetsitter">be a pet sitter</a>
+        </div>
+        
+        <div class="middle">
+            {% block the_content %}
+            {% endblock %}
+        </div>
+        <div class="top"><a href="#top"> &#8673; Back to top</a></div>
+        <div class="bottom">
+            Copyright 2021 &#169; Chi Ieong Ng C00223421.
+        </div>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+<table width="400">
+    <tr>
+        <td style="text-align: center">
+		<h2>Please leave your valuable comments</h2>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            
+		<form method="POST" action="/processform" >
+            
+            <div class="inputtext">
+            Name: &nbsp;&nbsp; <input type="TEXT" name="thename" class="textbox" pattern="[a-zA-Z\s]*" title="Only allow english alphabet and space!" requ ired /><br><br>
+			Email: &nbsp;&nbsp; <input type="email" name="theemail" class="textbox" required /><br><br>
+            Subject: &nbsp;&nbsp; <input type="TEXT" name="thesubject" class="textbox" pattern="[a-z0-0A-Z\s]*" title="Only allow english alphabet, number and space!" required /><br><br>
+            </div>
+               &nbsp;Message: <br><textarea name="themessage" class="comment" cols="45" rows="6" required></textarea>
+            <div class="buttonlist"><input type="submit" value="Send" class="send"><input type="reset" value="Reset" class="send"></div>
+		</form>
+        </td>
+    </tr>
+</table>
+{% endblock %}
+
