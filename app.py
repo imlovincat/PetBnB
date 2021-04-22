@@ -1,7 +1,11 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
+from data_utils import *
+from datetime import timedelta
+import os
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = os.urandom(24)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
 
 @app.route("/")
 def display_homepage():
@@ -10,7 +14,6 @@ def display_homepage():
         the_title="Project - PetBnB",
         the_opening_title="Main Screen",
     )
-
 
 @app.route("/login")
 def petbnb_login():
@@ -29,25 +32,41 @@ def petbnb_signup():
     )
 
 @app.route("/bepetsitter")
-def petbnb_bepetsitter():
+def petbnb_be_a_petsitter():
     return render_template(
         "bepetsitter.html",
         the_title="Project - PetBnB",
         the_opening_title="Sign up pet sitter Screen",
     )
 
-@app.route("/processform", methods=["POST"])
-def process_from_data():
+@app.route("/signupform", methods=["POST"])
+def process_for_new_customer_signup_form():
     data = request.form
+    customer_signup_data(data)
+    return render_template(
+        "signupcomplete.html",
+        the_title="Project - PetBnB",
+        the_opening_title="Thanks for sign up",
+        the_email=data["email"],
+    )
 
-    with open("comments.txt", "a") as df:
-        print(data["thename"], ",", sep="", end="", file=df)
-        print(data["theemail"], ",", sep="", end="", file=df)
-        print(data["thesubject"], ",", sep="", end="", file=df)
-        print(data["themessage"], file=df)
+@app.route("/loginform", methods=["POST"])
+def process_for_customer_login_form():
+    data = request.form
+    return_data = customer_login_data(data)
 
-        return (
-            "Hi "
-            + data["thename"]
-            + ", thank you for visit and leave me your comment! see you :)"
-        )
+    if len(return_data) == 1:
+        session['user'] = data["email"]
+        session.permanent = True
+        command = "Login Sucess"
+        
+    else : 
+        command = "Login Failed"
+        session['user'] = False
+
+    return render_template(
+        "logincomplete.html",
+        the_title="Project - PetBnB",
+        the_opening_title="Login complete",
+        the_command = command,
+    )

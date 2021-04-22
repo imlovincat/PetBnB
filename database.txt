@@ -1,0 +1,3 @@
+create database petbnb;
+use petbnb;
+CREATE TABLE customer (id int auto_increment primary key, email varchar(50) NOT NULL UNIQUE, password varchar(16) );

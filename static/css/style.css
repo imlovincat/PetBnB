@@ -6,6 +6,17 @@ body {
     margin: 0px;
 }
 
+div.heading {
+    background-color: #258CA5;
+    padding-top: 50px;
+    padding-bottom: 10px;
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    letter-spacing: 2px;
+	height: 80px;
+}
+
 div.top {
     background-color: white;
     padding-top: 10px;
@@ -15,21 +26,11 @@ div.top {
     letter-spacing: 2px;
 }
 
-div.heading {
-    background-color: #258CA5;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    color: white;
-    text-align: center;
-    font-size: 30px;
-    letter-spacing: 2px;
-	height: 100px;
-}
+
 
 div.middle {
     padding-top: 50px;
     padding-bottom: 50px;
-    min-height: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -45,6 +46,12 @@ div.bottom {
     color: black;
 }
 
-table.content {
-    border-spacing: 0px 0px;
+div.search {
+	min-width: 600px;
+    background-color: lightgray;
+    padding: 30px;
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: black;
 }
