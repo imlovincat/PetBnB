@@ -1,11 +1,27 @@
 {% extends "base.html" %}
 
 {% block the_content %}
-
-<table class="content">
+<form method="POST" action="/signupform">
+<div>
+<table>
     <tr>
-        <td>Sign up Screen</td>
+        <td>
+		<label>Your Email:</label><br>
+		<input type="email" id="email" name="email" required><br>
+		<label>repeat Email:</label><br>
+		<input type="email" id="repeatemail" name="repeatemail" disabled><br>
+		<label>set password:</label><br>
+		<input type="password" id="password" name="password" required><br>
+		<label>repeat password:</label><br>
+		<input type="password" id="repeatpassword" name="repeatpassword" disabled><br><br>
+		</td>
     </tr>
+	<tr>
+		<td>
+		<input type="submit" value="Submit">
+		</td>
+	</tr>
 </table>
-
+</div>
+</form>
 {% endblock %}

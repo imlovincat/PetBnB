@@ -2,10 +2,27 @@
 
 {% block the_content %}
 
-<table class="content">
+<div>
+<form method="POST" action="/loginform">
+<table>
     <tr>
-        <td>login screen</td>
-    </tr>
-</table>
+        <td>
 
+		<label>Your Email:</label><br>
+		<input type="email" id="email" name="email" required><br>
+		<label>Password:</label><br>
+		<input type="password" id="password" name="password" required><br><br>
+		
+
+		</td>
+    </tr>
+	<tr>
+		<td>
+		<input type="submit" value="Submit">
+		</td>
+	</tr>
+
+</table>
+</form>
+</div>
 {% endblock %}
