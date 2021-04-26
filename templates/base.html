@@ -14,12 +14,18 @@
         </div>
         
 		<div class="top">
-            <a href="/">Home</a> | <a href="/login">Login</a> | <a href="/signup">Create an new account</a> | <a href="/bepetsitter">be a pet sitter</a>
+            {% block the_menu %}
+				{% if session.get('user') %}
+					<div><a href="/">Home</a> | <a href="/">Your Account</a> | <a href="/signuppetsitter">be a pet sitter</a> | <a href="/logout">Logout</a></div>
+				{% else %}
+					<div><a href="/">Home</a> | <a href="/loginpage">Login</a> | <a href="/signup">Create an new account</a> | <a href="/signuppetsitter">be a pet sitter</a><div>
+			{% endif %}
+			{% endblock the_menu%}
         </div>
         
         <div class="middle">
             {% block the_content %}
-            {% endblock %}
+            {% endblock the_content %}
         </div>
         <div class="top"><a href="#top"> &#8673; Back to top</a></div>
         <div class="bottom">

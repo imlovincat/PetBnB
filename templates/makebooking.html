@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+
+<form method="POST" action="/makebooking">
+<div><p>Enter your details</p></div>
+<div>
+<table>
+    <tr>
+        <td>
+		<label>Title:</label><br>
+		<select name="title" id="title">
+		<option value="mr" selected>Mr</option>
+		<option value="mrs">Mrs</option>
+		<option value="ms">Ms</option>
+		<option value="miss">Miss</option>
+		</select><br>
+		<br>
+		<label>First Name:</label><br>
+		<input type="text" id="fname" name="fname" required><br>
+		<br>
+		<label>Surname:</label><br>
+		<input type="text" id="sname" name="sname" required><br>
+		<br>
+		<label>Email:</label><br>
+		<input type="email" id="email" name="email" required><br>
+		</br>
+		<label>Contact Number:</label><br>
+		<input type="text" id="phone" name="phone"><br>
+		<br>
+		<label>Please pick starting date of the service:</label><br>
+		<input type="datetime-local" id="checkintime" name="checkintime" required><br>
+		<br>
+		<label>Number of nights required:</label><br>
+		<input type="number" id="night" name="night" value="1" min="1" max="360" value="1"><br>
+		<br>
+		<label>How many pets do you need to board?</label><br>
+		<input type="number" id="numofpets" name="numofpets" value="1" min="1" max="100" value="1"><br>
+		<br>
+		<label>What type of pet or pets?</label><br>
+		<input type="checkbox" id="type1" name="type1" value="dog">
+		<label for="type1"> Dog</label><br>
+		<input type="checkbox" id="type2" name="type2" value="cat">
+		<label for="type2"> Cat</label><br>
+		<input type="checkbox" id="type3" name="type3" value="other">
+		<label for="type3"> Other</label><br>
+		<br>
+		<label>What size of pet or pets?</label><br>
+		<input type="checkbox" id="size1" name="size1" value="1-5kg">
+		<label for="size1"> 1-5kg</label><br>
+		<input type="checkbox" id="size2" name="size2" value="6-10kg">
+		<label for="type2"> 6-10kg</label><br>
+		<input type="checkbox" id="size3" name="size3" value="11-20kg">
+		<label for="type3"> 11-20kg</label><br>
+		<input type="checkbox" id="size4" name="size4" value="21-40kg">
+		<label for="type4"> 21-40kg</label><br>
+		<input type="checkbox" id="size5" name="size5" value="41kg+">
+		<label for="type5"> 41kg+</label><br>
+		<br>
+		<label>What breed of your pet or pets?</label><br>
+		<textarea rows="4" cols="50" id="breed" name="breed" ></textarea><br>
+		<br>
+		<label>Anything else the sitter will need to know? (optional)</label><br>
+		<textarea rows="4" cols="50" id="optional" name="optional" ></textarea><br>
+		<br>
+		</td>
+    </tr>
+	<tr>
+		<td>
+		<input type="submit" value="Submit">
+		</td>
+	</tr>
+</table>
+</div>
+</form>
+{% endblock %}

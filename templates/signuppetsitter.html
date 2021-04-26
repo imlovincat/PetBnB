@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+
+<form method="POST" action="/signuppetsitterform">
+<div>
+<table>
+    <tr>
+        <td>
+		<label>Pet Sitter Name:</label><br>
+		<input type="text" id="petsittername" name="petsittername" required><br>
+		<br>
+		<label>Contact email address:</label><br>
+		<input type="text" id="email" name="email"><br>
+		<br>
+		<label>Contact number:</label><br>
+		<input type="text" id="phone" name="phone"><br>
+		<br>
+		<label>Country:</label><br>
+		<select name="country" id="country">
+		<option value="ireland">Ireland</option>
+		</select><br>
+		<br>
+		<label>Location:</label><br>
+		<input type="text" id="location" name="location"><br>
+		<br>
+		<label>Eircode:</label><br>
+		<input type="text" id="eircode" name="eircode"><br>
+		<br>
+		<label>Description:</label><br>
+		<textarea rows="4" cols="50" id="description" name="description" ></textarea><br>
+		<br>
+		<label>Sevice you can provide:</label><br>
+		<input type="checkbox" id="service1" name="service[]" value="accommodation">
+		<label for="service1"> Pet accommodation</label><br>
+		<input type="checkbox" id="service2" name="service[]" value="dogwalking">
+		<label for="service2"> Dog walking</label><br>
+		<input type="checkbox" id="service3" name="service[]" value="daycare">
+		<label for="service3"> Pet daycare</label><br>
+		<input type="checkbox" id="service4" name="service[]" value="delivery">
+		<label for="service4"> Pet delivery</label><br>
+		<br>
+		<label>Number of pets that you can be watched at one time:</label><br>
+		<select name="numofpet" id="numofpet">
+		<option value="none">No set</option>
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+		</select><br>
+		<br>
+		<label>Accepted Pet Types:</label><br>
+		<input type="checkbox" id="type1" name="type[]" value="dog">
+		<label for="type1"> Dog</label><br>
+		<input type="checkbox" id="type2" name="type[]" value="cat">
+		<label for="type2"> Cat</label><br>
+		<input type="checkbox" id="type3" name="type[]" value="other">
+		<label for="type3"> Other</label><br>
+		<br>
+		<label>Accepted Pet size:</label><br>
+		<input type="checkbox" id="size1" name="size[]" value="1-5kg">
+		<label for="size1"> 1-5kg</label><br>
+		<input type="checkbox" id="size2" name="size[]" value="6-10kg">
+		<label for="type2"> 6-10kg</label><br>
+		<input type="checkbox" id="size3" name="size[]" value="11-20kg">
+		<label for="type3"> 11-20kg</label><br>
+		<input type="checkbox" id="size4" name="size[]" value="21-40kg">
+		<label for="type4"> 21-40kg</label><br>
+		<input type="checkbox" id="size5" name="size[]" value="41kg+">
+		<label for="type5"> 41kg+</label><br>
+		<br>
+		<label>The Types of house:</label><br>
+		<input type="radio" id="house1" name="house" value="apartment" checked>
+		<label for="house1"> Apartment</label><br>
+		<input type="radio" id="house2" name="house" value="detached">
+		<label for="house2"> Detached house</label><br>
+		<br>
+		<label>Outdoor area size:</label><br>
+		<input type="radio" id="outdoor1" name="outdoor" value="none" checked>
+		<label for="outdoor1"> None</label><br>
+		<input type="radio" id="outdoor2" name="outdoor" value="small">
+		<label for="outdoor2"> Small</label><br>
+		<input type="radio" id="outdoor3" name="outdoor" value="medium">
+		<label for="outdoor3"> Medium</label><br>
+		<input type="radio" id="outdoor4" name="outdoor" value="large">
+		<label for="outdoor4"> Large</label><br>
+		<br>
+		<label>Emergency transport:</label><br>
+		<input type="radio" id="transport1" name="transport" value="yes">
+		<label for="transport1"> Yes</label><br>
+		<input type="radio" id="transport2" name="transport" value="no" checked>
+		<label for="transport2"> No</label><br>
+		<br>
+		<input type="file" name="files[]" accept="image/jpg, image/png" max="6" multiple disabled><br>
+		<br>
+		</td>
+    </tr>
+	<tr>
+		<td>
+		<input type="submit" value="Submit">
+		</td>
+	</tr>
+</table>
+</div>
+</form>
+
+{% endblock %}
