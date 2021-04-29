@@ -11,27 +11,33 @@
 		<input type="text" id="petsittername" name="petsittername" required><br>
 		<br>
 		<label>Contact email address:</label><br>
-		<input type="text" id="email" name="email"><br>
+		<input type="text" id="email" name="email" required><br>
 		<br>
 		<label>Contact number:</label><br>
-		<input type="text" id="phone" name="phone"><br>
+		<input type="text" id="phone" name="phone" required><br>
 		<br>
 		<label>Country:</label><br>
-		<select name="country" id="country">
+		<select name="country" id="country" required>
 		<option value="ireland">Ireland</option>
 		</select><br>
 		<br>
-		<label>Location:</label><br>
-		<input type="text" id="location" name="location"><br>
+		<label>City:</label><br>
+		<input type="text" id="city" name="city" required><br>
 		<br>
-		<label>Eircode:</label><br>
-		<input type="text" id="eircode" name="eircode"><br>
+		<label>Town:</label><br>
+		<input type="text" id="town" name="town" required><br>
+		<br>
+		<label>Street Address:</label><br>
+		<input type="text" id="street" name="street" required><br>
 		<br>
 		<label>Description:</label><br>
-		<textarea rows="4" cols="50" id="description" name="description" ></textarea><br>
+		<textarea rows="4" cols="50" id="description" name="description" required></textarea><br>
+		<br>
+		<label>Price/per night (Euro):</label><br>
+		<input type="number" id="price" name="price" min="0", max="999" required><br>
 		<br>
 		<label>Sevice you can provide:</label><br>
-		<input type="checkbox" id="service1" name="service[]" value="accommodation">
+		<input type="checkbox" id="service1" name="service[]" value="accommodation" disabled checked>
 		<label for="service1"> Pet accommodation</label><br>
 		<input type="checkbox" id="service2" name="service[]" value="dogwalking">
 		<label for="service2"> Dog walking</label><br>
@@ -41,8 +47,8 @@
 		<label for="service4"> Pet delivery</label><br>
 		<br>
 		<label>Number of pets that you can be watched at one time:</label><br>
-		<select name="numofpet" id="numofpet">
-		<option value="none">No set</option>
+		<select name="numofpet" id="numofpet" required>
+		<option value="0">No set</option>
 		<option value="1">1</option>
 		<option value="2">2</option>
 		<option value="3">3</option>
@@ -90,9 +96,9 @@
 		<label for="outdoor4"> Large</label><br>
 		<br>
 		<label>Emergency transport:</label><br>
-		<input type="radio" id="transport1" name="transport" value="yes">
+		<input type="radio" id="transport1" name="transport" value="1">
 		<label for="transport1"> Yes</label><br>
-		<input type="radio" id="transport2" name="transport" value="no" checked>
+		<input type="radio" id="transport2" name="transport" value="0" checked>
 		<label for="transport2"> No</label><br>
 		<br>
 		<input type="file" name="files[]" accept="image/jpg, image/png" max="6" multiple disabled><br>
