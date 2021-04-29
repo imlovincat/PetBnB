@@ -1,3 +1,4 @@
 create database petbnb;
 use petbnb;
 CREATE TABLE customer (id int auto_increment primary key, email varchar(50) NOT NULL UNIQUE, password varchar(16) );
+create table petsitter (id int auto_increment primary key, customerid int, petsittername varchar(50) unique, email varchar(50), phone varchar(20), country varchar(50), city varchar(50), town varchar(50), address varchar(100), description varchar(1000),price int, petservice varchar(500), petnums int, pettype varchar(300), petsize varchar(300), housetype varchar(300), outdoor varchar(20), transport boolean, deleteflag boolean NOT NULL);

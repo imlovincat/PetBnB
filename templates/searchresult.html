@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+
+{% block the_result %}
+	{% if the_num == 0 %}
+		<p>NO FOUND</p>
+	{% else %}
+		
+		<div>
+		<table>
+			<tr>
+				<td>Result: {{ the_num }}</td>
+			</tr>
+		</table>
+		{% for row in data %}
+		<table class = "showbox">
+		  <tr>
+			<td class="left" rowspan="4"><a href="/viewpetsitter/{{ row[2] }}"><img src="static/images/petsitter.png" width="200" height="200"></a></td>
+			<td class="petsittername">Pet Sitter: {{ row[2] }}</td>
+			<td class="price" >€{{ row[10] }}/per night</td>
+		  </tr>
+		  <tr>
+			<td class="location" colspan="2">Location: {{ row[8] }},{{ row[7] }},{{ row[6] }},{{ row[5] }}</td>
+		  </tr>
+		  <tr>
+			<td class="description" colspan="2">Description: {{ row[9] }}</td>
+		  </tr>
+		  <tr>
+			<td></td>
+			<td class="button"><a href="/viewpetsitter/{{ row[2] }}"><button class="moredetails">More Details</button></a></td>
+		  </tr>
+		</table>
+		<br><br>
+		{% endfor %}
+		</div>
+	{% endif %}
+{% endblock the_result %}
+
+{% endblock %}

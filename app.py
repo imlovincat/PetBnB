@@ -64,7 +64,24 @@ def petbnb_make_booking():
         "makebooking.html",
         the_title="Project - PetBnB",
         the_opening_title="Make Booking Screen",
-    )     
+    )
+
+@app.route("/searchform", methods=["POST"])
+def process_search_form():
+    data = request.form
+    
+    return render_template(
+        "searchresult.html",
+        the_title="Project - PetBnB",
+        the_opening_title="Search Result",
+        data = search_petsitter_data(data),
+        the_num = len(search_petsitter_data(data)),     
+    )  
+    
+@app.route("/viewpetsitter/<data>", methods=['GET'])
+def process_viewpetsitter_form(data):
+    data = view_petsitter_data(data)
+    return str(data)
 
 @app.route("/signupform", methods=["POST"])
 def process_for_new_customer_signup_form():
@@ -77,10 +94,11 @@ def process_for_new_customer_signup_form():
         the_email=data["email"],
     )
 
-@app.route("/signuppetsitterform", methods=["GET","POST"])
+@app.route("/signuppetsitterform", methods=["POST"])
 def process_for_new_petsitter_signup_form():
-    size = request.form.getlist('size[]')
-    return format(size)
+    data = request.form
+    petsitter_signup_data(session['user'],data)
+    return redirect('/')
 
 @app.route("/loginform", methods=["POST"])
 def process_for_customer_login_form():
