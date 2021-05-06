@@ -1,73 +1,94 @@
 {% extends "base.html" %}
 
 {% block the_content %}
-
-<form method="POST" action="/makebooking">
-<div><p>Enter your details</p></div>
 <div>
-<table>
+<p>Enter your booking details</p>
+<form method="POST" action="/makebookingform/{{ data[0][2] }}">
+<table class = "showbox">
+	<tr>
+		<td class="makebooking_photo" rowspan="3"><img src="/static/images/petsitter.png" width="100" height="100"></td>
+		<td class="makebooking_petsittername">{{ data[0][2] }}</td>
+		
+	</tr>
+	<tr>
+		<td class="makebooking_location">Location: {{ data[0][8] }},{{ data[0][7] }},{{ data[0][6] }},{{ data[0][5] }}</td>
+	</tr>
+	<tr>
+		<td class="makebooking_price" >€{{ data[0][10] }}/per night</td>
+	</tr>
     <tr>
-        <td>
+        <td colspan="2" class="makebooking_form">
 		<label>Title:</label><br>
 		<select name="title" id="title">
-		<option value="mr" selected>Mr</option>
-		<option value="mrs">Mrs</option>
-		<option value="ms">Ms</option>
-		<option value="miss">Miss</option>
+		{% if session.get('user') %}	
+			{% if "Mrs" in customerdata[0][3] %}
+				<option value="Mr">Mr</option>
+				<option value="Mrs" selected>Mrs</option>
+				<option value="Ms">Ms</option>
+				<option value="Miss">Miss</option>
+			{% elif "Ms" in customerdata[0][3] %}
+				<option value="Mr">Mr</option>
+				<option value="Mrs">Mrs</option>
+				<option value="Ms" selected>Ms</option>
+				<option value="Miss">Miss</option>
+			{% elif "Miss" in customerdata[0][3] %}
+				<option value="Mr">Mr</option>
+				<option value="Mrs">Mrs</option>
+				<option value="Ms">Ms</option>
+				<option value="Miss" selected>Miss</option>
+			{% else %}
+				<option value="Mr" selected>Mr</option>
+				<option value="Mrs">Mrs</option>
+				<option value="Ms">Ms</option>
+				<option value="Miss">Miss</option>
+			{% endif %}	
+		{% else %}
+			<option value="Mr">Mr</option>
+			<option value="Mrs">Mrs</option>
+			<option value="Ms">Ms</option>
+			<option value="Miss">Miss</option>
+		{% endif %}
+		
 		</select><br>
 		<br>
 		<label>First Name:</label><br>
-		<input type="text" id="fname" name="fname" required><br>
+		<input type="text" id="fname" name="fname" value="{{ customerdata[0][1] }}" required><br>
 		<br>
 		<label>Surname:</label><br>
-		<input type="text" id="sname" name="sname" required><br>
+		<input type="text" id="sname" name="sname" value="{{ customerdata[0][2] }}" required><br>
 		<br>
-		<label>Email:</label><br>
-		<input type="email" id="email" name="email" required><br>
-		</br>
+		<label>Contact Email:</label><br>
+		<input type="email" id="email" name="email" value="{{ customerdata[0][0] }}" required><br>
+		<br>
 		<label>Contact Number:</label><br>
-		<input type="text" id="phone" name="phone"><br>
+		<input type="text" id="phone" name="phone" value="{{ customerdata[0][4] }}"><br>
 		<br>
-		<label>Please pick starting date of the service:</label><br>
-		<input type="datetime-local" id="checkintime" name="checkintime" required><br>
+		<label>Please pick the start date of pet service:</label><br>
+		<input type="date" id="checkin" name="checkin" value="{{ today }}" min="{{ today }}" max="{{ nextyear}}" required><br>
 		<br>
-		<label>Number of nights required:</label><br>
-		<input type="number" id="night" name="night" value="1" min="1" max="360" value="1"><br>
+		<label>Please pick the end date of pet service:</label><br>
+		<input type="date" id="checkout" name="checkout" value="{{ today }}" min="{{ today }}" max="{{ nextyear}}" required><br>
 		<br>
 		<label>How many pets do you need to board?</label><br>
-		<input type="number" id="numofpets" name="numofpets" value="1" min="1" max="100" value="1"><br>
+		<input type="number" id="numofpets" name="numofpets" value="1" min="1" max="20" value="1"><br>
 		<br>
 		<label>What type of pet or pets?</label><br>
-		<input type="checkbox" id="type1" name="type1" value="dog">
-		<label for="type1"> Dog</label><br>
-		<input type="checkbox" id="type2" name="type2" value="cat">
-		<label for="type2"> Cat</label><br>
-		<input type="checkbox" id="type3" name="type3" value="other">
-		<label for="type3"> Other</label><br>
+		{% for row in pettype %}
+		<input type="checkbox" id="type{{ row }}" name="type[]" value="{{ row }}">
+		<label for="type{{ row }}"> {{ row }}</label><br>
+		{% endfor %}
 		<br>
-		<label>What size of pet or pets?</label><br>
-		<input type="checkbox" id="size1" name="size1" value="1-5kg">
-		<label for="size1"> 1-5kg</label><br>
-		<input type="checkbox" id="size2" name="size2" value="6-10kg">
-		<label for="type2"> 6-10kg</label><br>
-		<input type="checkbox" id="size3" name="size3" value="11-20kg">
-		<label for="type3"> 11-20kg</label><br>
-		<input type="checkbox" id="size4" name="size4" value="21-40kg">
-		<label for="type4"> 21-40kg</label><br>
-		<input type="checkbox" id="size5" name="size5" value="41kg+">
-		<label for="type5"> 41kg+</label><br>
-		<br>
-		<label>What breed of your pet or pets?</label><br>
-		<textarea rows="4" cols="50" id="breed" name="breed" ></textarea><br>
+		<label>What Name and breed of your pet or pets?</label><br>
+		<textarea rows="4" cols="50" id="breed" name="breed" placeholder="pet1: its name, its breed, its gender &#13;&#10;pet2: its name, its breed, its gender&#13;&#10;....."></textarea><br>
 		<br>
 		<label>Anything else the sitter will need to know? (optional)</label><br>
-		<textarea rows="4" cols="50" id="optional" name="optional" ></textarea><br>
+		<textarea rows="10" cols="50" id="optional" name="optional" placeholder="Your pet's favorite;&#13;&#10;How many feedings a day;&#13;&#10;Its personality;&#13;&#10;...." ></textarea><br>
 		<br>
 		</td>
     </tr>
 	<tr>
-		<td>
-		<input type="submit" value="Submit">
+		<td class="makebooking_button" colspan="2">
+		<input class="makebooking_submit" type="submit" value="Submit">
 		</td>
 	</tr>
 </table>

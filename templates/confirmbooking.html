@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+<div>
+<p>Choose Your Payment</p>
+<form method="POST" action="/confirmbookingform">
+<table class = "showbox">
+	<tr>
+		<td class="confirmbooking_photo" rowspan="2"><img src="/static/images/petsitter.png" width="100" height="100"></td>
+		<td class="confirmbooking_petsittername">{{ petsitter[0][2] }}</td>
+		
+	</tr>
+	<tr>
+		<td class="confirmbooking_location">Location: {{ petsitter[0][8] }},{{ petsitter[0][7] }},{{ petsitter[0][6] }},{{ petsitter[0][5] }}</td>
+	</tr>
+	
+	<tr>
+		<td colspan="2" class="confirmbooking_details" >
+		Customer: {{ data["title"] }} {{ data["sname"] }}<br>
+		Number of Pets: {{ data["numofpets"] }}<br>
+		Start date: {{ data["checkin"] }}<br>
+		End date: {{data["checkout"] }}<br>
+		Nights: {{ nights }}<br>
+		<hr>
+		</td>
+	</tr>
+	
+	<tr>
+		<td colspan="2" class="confirmbooking_price" >
+		Total Price: €{{ price }}<br>
+		</td>
+	</tr>
+	
+	
+    <tr>
+        <td colspan="2" class="confirmbooking_payment">
+		Would you like to pay in: <br>
+		<input type="radio" id="payment1" name="payment" value="Payment on arrival" checked required>
+		<label for="payment1">Payment on arrival</label><br>
+		<input type="radio" id="payment2" name="payment" value="Bank Credit/Debit Card" disabled>
+		<label for="payment2"><del>Bank Credit/Debit Card</del></label><br>
+		<input type="radio" id="payment3" name="payment" value="Paypal" disabled>
+		<label for="payment3"><del>Paypal</del></label>
+		</td>
+    </tr>
+	<tr>
+		<td class="confirmbooking_button" colspan="2">
+		<input type="hidden" id="petsitter" name="petsitter" value="{{ petsitter[0][2] }}">
+		<input type="hidden" id="title" name="title" value="{{ data['title'] }}">
+		<input type="hidden" id="fname" name="fname" value="{{ data['fname'] }}">
+		<input type="hidden" id="sname" name="sname" value="{{ data['sname'] }}">
+		<input type="hidden" id="email" name="email" value="{{ data['email'] }}">
+		<input type="hidden" id="phone" name="phone" value="{{ data['phone'] }}">
+		<input type="hidden" id="checkin" name="checkin" value="{{ data['checkin'] }}">
+		<input type="hidden" id="checkout" name="checkout" value="{{ data['checkout'] }}">
+		<input type="hidden" id="numofpets" name="numofpets" value="{{ data['numofpets'] }}">
+		<input type="hidden" id="type" name="type" value="{{ pettype }}">
+		<input type="hidden" id="breed" name="breed" value="{{ data['breed'] }}">
+		<input type="hidden" id="optional" name="optional" value="{{ data['optional'] }}">
+		<input type="hidden" id="nights" name="nights" value="{{ nights }}">
+		<input type="hidden" id="price" name="price" value="{{ price }}">
+		
+		<input class="confirmbooking_submit" type="submit" value="Confirm">
+		</td>
+	</tr>
+</table>
+</form>
+</div>
+{% endblock %}

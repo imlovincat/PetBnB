@@ -4,7 +4,7 @@
     <head>
 
         <title>{{ the_title }}</title>
-        <link rel="stylesheet" href="static/css/style.css">
+        <link rel="stylesheet" href="/static/css/style.css">
 
     </head>
     <body>
@@ -16,10 +16,10 @@
 		<div class="top">
             {% block the_menu %}
 				{% if session.get('user') %}
-					<div><a href="/">Home</a> | <a href="/">Your Account</a> | <a href="/signuppetsitter">be a pet sitter</a> | <a href="/logout">Logout</a></div>
+					<div><a href="/">Home</a> | <a href="/viewaccount">Your Account</a> | <a href="/signuppetsitter">be a pet sitter</a> | <a href="/logout">Logout</a></div>
 				{% else %}
 					<div><a href="/">Home</a> | <a href="/loginpage">Login</a> | <a href="/signup">Create an new account</a> | <a href="/signuppetsitter">be a pet sitter</a><div>
-			{% endif %}
+				{% endif %}
 			{% endblock the_menu%}
         </div>
         

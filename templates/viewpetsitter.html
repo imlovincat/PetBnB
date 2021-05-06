@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+<div>
+<table class="viewpetbnb">
+  <tr >
+    <td rowspan="3" class="viewpetsitterphoto"><img src="/static/images/petsitter.png" width="80" height="80"></td>
+    <td class="viewpetsittername">{{ data[0][2] }}</td>
+  </tr>
+  
+  <tr>
+    <td class="viewpetbnblocation">Location: {{ data[0][8] }},{{ data[0][7] }},{{ data[0][6] }},{{ data[0][5] }}</td>
+  </tr>
+  
+  <tr>
+	<td class="viewpetbnbprice">From €{{ data[0][10] }}/night</td>
+  </tr>
+  
+  <tr>
+    <td colspan="2" class="viewpetbnbphoto"><img src="/static/images/petsitter.png" width="200" height="200">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/images/petsitter.png" width="200" height="200">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/images/petsitter.png" width="200" height="200"></td>
+  </tr>
+  <tr>
+    <td colspan="2" class="viewpetbnbtext">Description:<br>{{ data[0][9] }}<br><br><br></td>
+  </tr>
+  <tr>
+    <td colspan="2"><hr></td>
+  </tr>
+  <tr>
+    <td colspan="2" class="viewpetbnbtext">
+	Service provided
+	<ul>
+	{% for row in service %}
+	<li>{{ row }}</li>
+	{% endfor %}
+	</ul>
+	</td>
+  </tr>
+  <tr>
+    <td colspan="2" class="viewpetbnbtext">Number of pets that will be watched at one time<br><ul><li>{{ data[0][12] }}</li></ul></td>
+  </tr>
+  <tr>
+    <td colspan="2" class="viewpetbnbtext">
+	Accepted Pet Types<br>
+	<ul>
+	{% for row in pettype %}
+	<li>{{ row }}</li>
+	{% endfor %}
+	</ul></td>
+  </tr>
+    <tr>
+    <td colspan="2" class="viewpetbnbtext">
+	Accepted Pet Size<br>
+	<ul>
+	{% for row in petsize %}
+	<li>{{ row }}</li>
+	{% endfor %}
+	</ul></td>
+  </tr>
+  <tr>
+    <td colspan="2" class="viewpetbnbtext">The type of House<br><ul><li>{{ data[0][15] }}</li></ul></td>
+  </tr>
+  <tr>
+    <td colspan="2" class="viewpetbnbtext">Outdoor area<br><ul><li>{{ data[0][16] }}</li></ul></td>
+  </tr>
+  <tr>
+    <td colspan="2" class="viewpetbnbtext">
+	Emergency transport<br>
+	<ul><li>
+	{% if data[0][17] == 1 %}Yes
+	{% else %}No
+	{% endif %}
+	</li></ul>
+	</td>
+  </tr>
+  <tr>
+    <td colspan="2" class="viewpetbnbbutton"><a href="/makebooking/{{ data[0][2] }}"><button class="make_reservation">MAKE RESERVATION</button></a></td>
+  </tr>
+</table>
+</div>
+{% endblock %}
