@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+<div>
+<p>
+Booking Ref: {{ bookingRef }}<br>
+Status: {{ data[0][0] }}
+</p>
+<table class="showbox">
+  <tr >
+	<td class="viewbooking_details">
+	Title: {{ data[0][1] }}<br>
+	First Name: {{ data[0][2] }}<br>
+	Surname: {{ data[0][3] }}<br>
+	<hr>
+	Pet Sitter: {{ data[0][15] }}<br>
+	Location: {{ data[0][21] }} {{ data[0][20] }} {{ data[0][19] }} {{ data[0][18] }}<br>
+	Contact Email: {{ data[0][16] }} <br>
+	Hotline: {{ data[0][17] }} <br>
+	Total Price: €{{ data[0][8] }}<br>
+	Date period: {{ data[0][6] }} to {{ data[0][7] }}<br>
+	Number of pets: {{ data[0][10] }}<br>
+	The type of pets: {{ data[0][11] }}<br>
+	the Name/breed of pets: {{ data[0][12] }}<br>
+	Addition details: {{ data[0][13] }}<br>
+	</td>
+  </tr>
+  <tr>
+	<td class="viewbooking_print">
+	<button class="viewbooking_button">Print</button><br>
+	</td>
+  </tr>
+</table>
+
+
+
+</div>
+{% endblock %}

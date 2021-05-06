@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+<div>
+<p> Booking Status: in progress <br>
+The confirmation email will be sent to you after your booking is confirmed by Pet Sitter</p>
+<table class = "showbox">
+	<tr>
+		<td class="completebooking_review">
+		Booking ref: {{ bookingRef }}
+		<br>
+		Total Price: €{{ data['price'] }}
+		<br>
+		Payment Type: {{ data['payment'] }}
+		<br>
+		Customer: {{ data['title'] }} {{ data['fname'] }} {{ data['sname'] }}
+		<br>
+		{% if data['phone'] %}
+		Contact: {{ data['phone'] }}
+		<br>
+		{% endif %}
+		Email: {{ data['email'] }}
+		<br>
+		Pet Sitter: {{ petsitter[0][2] }}
+		<br>
+		Location: {{ petsitter[0][8] }},{{ petsitter[0][7] }},{{ petsitter[0][6] }},{{ petsitter[0][5] }}
+		<br>
+		Start date: {{ data['checkin'] }}
+		<br>
+		End date: {{ data['checkout'] }}
+		<br>
+		Nights: {{ data['nights'] }}
+		<br>
+		Number of pets: {{ data['numofpets'] }}
+		<br>
+		Type of pets: 
+		{% for row in pettype %}
+		{{ row }}
+		{% if row in pettype[-1] %}
+		{% else %}
+		,
+		{% endif %}
+		{% endfor %}
+		<br>
+		{% if data['breed'] %}	
+		Name/Breed of pets:<br>
+		<textarea class="completebooking_textarea" cols="80" rows="{{ (data['breed'] | wordwrap(80)).count('\n') + 1}}" disabled>{{ data['breed'] | wordwrap(80)}}</textarea><br>
+		{% endif %}
+		{% if data['optional'] %}
+		Addition Details:<br>
+		<textarea class="completebooking_textarea" cols="80" rows="{{ (data['optional'] | wordwrap(80)).count('\n') + 1}}" disabled>{{ data['optional'] | wordwrap(80)}}</textarea><br>
+		{% endif %}
+		</td>
+	</tr>
+	<tr>
+		<td class="completebooking_button">
+		<button class="completebooking_print">Print</button>
+		</td>
+	</tr>
+</table>
+</div>
+{% endblock %}

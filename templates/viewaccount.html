@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+<div>
+<p>Your Account: {{ email }}</p>
+<table class="showbox">
+  <tr >
+	<td class="viewaccount_customer">
+	Title: {{ data[0][2] }}<br>
+	First Name:  {{ data[0][0] }}<br>
+	Surname:  {{ data[0][1] }}<br>
+	Date of Birth:  {{ data[0][3] }} <br>
+	Contact number:  {{ data[0][5] }}<br>
+	Address:  {{ data[0][4] }}<br>
+	</td>
+  </tr>
+</table>
+<br>
+<br>
+<p>Your Booking Records:</p>
+{% for row in booking %}
+<table class="showbox">
+  <tr >
+	<td class="viewaccount_booking" rowspan="2">
+	Booking Ref: {{ row[0] }}<br>
+	Pet Sitter: {{ row[16] }}<br>
+	Location: {{ row[20] }} {{ row[19] }} {{ row[18] }} {{ row[17] }}<br>
+	Date period: {{ row[8] }} to {{ row[9] }}<br>
+	Status: {{ row[2] }}
+	</td>
+	<td class="viewaccount_price">
+	Total Price: €{{ row[10] }}<br>
+	</td>
+  </tr>
+  <tr>
+	<td class="viewaccount_button_space">
+	<a href="/viewbooking/{{ row[0] }}"><button class="viewaccount_button">more details</button></a><br>
+	</td>
+  </tr>
+</table>
+<br><br>
+{% endfor %}
+
+
+
+</div>
+{% endblock %}

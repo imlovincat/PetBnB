@@ -1,4 +1,5 @@
 create database petbnb;
 use petbnb;
-CREATE TABLE customer (id int auto_increment primary key, email varchar(50) NOT NULL UNIQUE, password varchar(16) );
+create table customer (id int auto_increment primary key, email varchar(50) unique NOT NULL, password varchar(16), fname varchar(50), sname varchar(50), title varchar(10), dateOfBirth date, address varchar(100), contactNumber int, emailVerified boolean, deleteflag boolean);
 create table petsitter (id int auto_increment primary key, customerid int, petsittername varchar(50) unique, email varchar(50), phone varchar(20), country varchar(50), city varchar(50), town varchar(50), address varchar(100), description varchar(1000),price int, petservice varchar(500), petnums int, pettype varchar(300), petsize varchar(300), housetype varchar(300), outdoor varchar(20), transport boolean, deleteflag boolean NOT NULL);
+create table booking (id int auto_increment primary key, bookingRef varchar(100) UNIQUE NOT NULL, petSitterID int, customerID int, status varchar(20), title varchar(10), fname varchar(50), sname varchar(50), phone varchar(50), email varchar(100), startDate date, endDate date, totalPrice varchar(20), petQunatity int, typeOfPet varchar(100), breed varchar(200), note varchar(300), createdBy datetime, deleteflag boolean);
