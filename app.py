@@ -1,7 +1,14 @@
-from flask import Flask, render_template, request, session, redirect,url_for
+from flask import Flask, render_template, request, session, redirect,url_for, make_response, jsonify
 from data_utils import *
 from datetime import timedelta, datetime, date
+import time
 import os
+import models
+import paymentprocessing
+
+
+from werkzeug.utils import secure_filename
+import cv2
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -140,19 +147,32 @@ def process_for_confirmbooking_form():
     data = request.form
     petsitter = view_petsitter_data(data['petsitter'])
     pettype = str_to_list(data['type'])
+    
     if session.get('user'):
         user = session['user']
     else: user = ""
-    bookingRef = confirm_makebooking_data(user,data)
-    return render_template(
-        "completebooking.html",
-        the_title="Project - PetBnB",
-        the_opening_title="Booking completed",
-        data = data,
-        petsitter = petsitter,
-        pettype = pettype,
-        bookingRef = bookingRef
-    )  
+    
+    if "Bank Credit/Debit Card" in data['payment']:
+        return render_template(
+            "bankcardpayment.html",
+            the_title="Project - PetBnB",
+            the_opening_title="Bank Credit/Debit Card Payment",
+            data = data,
+            petsitter = petsitter,
+            pettype = pettype,
+        )
+    
+    else:
+        bookingRef = confirm_makebooking_data(user,data)
+        return render_template(
+            "completebooking.html",
+            the_title="Project - PetBnB",
+            the_opening_title="Booking completed",
+            data = data,
+            petsitter = petsitter,
+            pettype = pettype,
+            bookingRef = bookingRef
+        )  
 
 
 @app.route("/searchform", methods=["POST"])
@@ -215,3 +235,106 @@ def process_for_customer_login_form():
         
 if __name__ == '__main__':
     app.run(debug=True)
+
+@app.route("/payment", methods=["POST"])
+def process_for_credit_card_payment(): 
+    data = request.form
+    amount = str("{:.2f}".format(float(int(data['price']))))
+    card = models.CreditCard()
+    card.number = data['number']
+    card.expiration_date = data['expiration_date']
+    card.code = data['code']
+
+    response = paymentprocessing.charge_credit_card(card, amount)
+    
+    time.sleep(3)
+    
+    print(response.is_success)
+    print(response.messages)
+    
+    
+    if response.is_success:
+        petsitter = view_petsitter_data(data['petsitter'])
+        pettype = str_to_list(data['type'])
+    
+        if session.get('user'):
+            user = session['user']
+        else: user = ""
+    
+        transactionID = response.messages[0][-11:-1]
+    
+        bookingRef = confirm_makebooking_data(user,data)
+        
+        make_payment_data(transactionID, bookingRef)
+        
+        return render_template(
+            "completebooking.html",
+            the_title="Project - PetBnB",
+            the_opening_title="Booking completed",
+            data = data,
+            petsitter = petsitter,
+            pettype = pettype,
+            bookingRef = bookingRef,
+        )  
+        
+    else:
+        return "Error"
+    
+    
+    
+# for sandbox payment testing    
+@app.route("/payment_testing")
+def process_for_credit_card_payment_testing():    
+    amount = "19.99"
+    card = models.CreditCard()
+    card.number = "4007000000027" # visa test number
+    card.expiration_date = "2050-01" # any date in the future
+    card.code = "123" # any 3 digit code
+
+    response = paymentprocessing.charge_credit_card(card, amount)
+    
+    messages = "Sorry, the transaction is failed, please try again"
+    if response.is_success: messages = str(response.messages)
+    
+    
+    print(response.is_success)
+    print(response.messages)
+    
+    return messages
+    
+    
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp'])
+ 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+app.send_file_max_age_default = timedelta(seconds=1)
+ 
+
+@app.route('/upload', methods=['POST', 'GET']) 
+def upload():
+    if request.method == 'POST':
+        f = request.files['file']
+ 
+        if not (f and allowed_file(f.filename)):
+            return jsonify({"error": 1001, "msg": "only accept file types: png,PNG,jpg,JPG,bmp"})
+ 
+        f.filename = "1" + ".jpg"
+        user_input = request.form.get("name")
+        basepath = os.path.dirname(__file__)
+ 
+        upload_path = os.path.join(basepath, 'static/images', secure_filename(f.filename))
+
+        # 注意：没有的文件夹一定要先创建，不然会提示没有该路径
+        # upload_path = os.path.join(basepath, 'static/images','test.jpg')  #注意：没有的文件夹一定要先创建，不然会提示没有该路径
+        
+        f.save(upload_path)
+ 
+        # 使用Opencv转换一下图片格式和名称
+        img = cv2.imread(upload_path)
+        cv2.imwrite(os.path.join(basepath, 'static/images', 'test.jpg'), img)
+ 
+        return render_template('upload_ok.html',userinput=user_input,val1=time.time())
+ 
+    return render_template('upload.html')

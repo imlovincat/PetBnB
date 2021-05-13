@@ -172,20 +172,20 @@ def petsitter_signup_data(user,data):
 
 def confirm_makebooking_data(user,data):
     try:
-        if user != "":
+        createdBy = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        bookingRef = "PETBNB" + "00" + str(createdBy[0:4]) + str(createdBy[5:7]) + str(createdBy[8:10]) + str(createdBy[11:13]) + str(createdBy[14:16]) + str(createdBy[17:19]) + str(randint(0,9999))                    
+        if user:
             with DBcm.UseDatabase(connection) as cursor:
                 SQL = """SELECT id FROM customer WHERE email = %s"""
                 cursor.execute(SQL,(user,),)
                 return_data = cursor.fetchall()
                 customerid = return_data[0][0]
-        else: customerid = ""
+        else: customerid = 0
         with DBcm.UseDatabase(connection) as cursor:
                 SQL = """SELECT id FROM petsitter WHERE petsittername = %s"""
                 cursor.execute(SQL,(data['petsitter'],),)
                 return_data = cursor.fetchall()
                 petsitterid = return_data[0][0]
-        createdBy = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
-        bookingRef = "PETBNB" + "00" + str(createdBy[0:4]) + str(createdBy[5:7]) + str(createdBy[8:10]) + str(createdBy[11:13]) + str(createdBy[14:16]) + str(createdBy[17:19]) + str(randint(0,9999))
         status = "Pending"
         if data.get('phone'): phone = data['phone']
         else: phone = ""
@@ -208,13 +208,14 @@ def confirm_makebooking_data(user,data):
                       startDate,
                       endDate,
                       totalPrice,
+                      paymentMethod,
                       petQunatity,
                       typeOfPet,
                       breed,
                       note,
                       createdBy,
                       deleteflag
-                      ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 0) """
+                      ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 0) """
             cursor.execute(SQL, (
                                 bookingRef,
                                 petsitterid,
@@ -228,38 +229,39 @@ def confirm_makebooking_data(user,data):
                                 data['checkin'],
                                 data['checkout'],
                                 data['price'],
+                                data['payment'],
                                 data['numofpets'],
                                 data['type'],
                                 breed,
                                 note,
                                 createdBy,
                                 ),)
+
         
-        print(bookingRef)
-        print(petsitterid)
-        print(customerid)
-        print(status)
-        print(data['title'])
-        print(data['fname'])
-        print(data['sname'])
-        print(phone)
-        print(data['email'])
-        print(data['checkin'])
-        print(data['checkout'])
-        print(data['price'])
-        print(data['numofpets'])
-        print(data['type'])
-        print(breed)
-        print(note)
-        print(createdBy)                    
         return bookingRef
     except:
-        return "Error"
+        print("Error")
         
+def make_payment_data(transactionID, bookingRef):
+    createdBy = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+    try: 
+        with DBcm.UseDatabase(connection) as cursor:
+            SQL = """INSERT INTO payment (
+                    transactionID,
+                    bookingRef,
+                    createdBy,
+                    canceled
+                    ) VALUES (
+                    %s,%s,%s,0 
+                    )        
+                    """
+            cursor.execute(SQL, (transactionID, bookingRef, createdBy,),)
+            return True
+    except:
+        print("Error")
     
-    
-    
-    
+
+
 def search_petsitter_data(data):
     with DBcm.UseDatabase(connection) as cursor:
         SQL = """SELECT * FROM petsitter
