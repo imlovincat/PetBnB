@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+<form method="POST" action="/payment">
+<div>
+<table>
+    <tr>
+        <td>
+		<label>Card Number:</label>
+		<br>
+		<input type="text" id="number" name="number" value="4007000000027" required>
+		<br>
+		<label>Expiration date:</label><br>
+		<input type="month" id="expiration_date" name="expiration_date" value = "2050-01" required>
+		<br>
+		<label>Code:</label><br>
+		<input type="text" id="code" name="code" value="123" required><br><br>
+		</td>
+    </tr>
+	<tr>
+		<td>
+		<input type="submit" value="Submit">
+		<input type="hidden" id="payment" name="payment" value="{{ data['payment'] }}">
+		<input type="hidden" id="petsitter" name="petsitter" value="{{ petsitter[0][2] }}">
+		<input type="hidden" id="title" name="title" value="{{ data['title'] }}">
+		<input type="hidden" id="fname" name="fname" value="{{ data['fname'] }}">
+		<input type="hidden" id="sname" name="sname" value="{{ data['sname'] }}">
+		<input type="hidden" id="email" name="email" value="{{ data['email'] }}">
+		<input type="hidden" id="phone" name="phone" value="{{ data['phone'] }}">
+		<input type="hidden" id="checkin" name="checkin" value="{{ data['checkin'] }}">
+		<input type="hidden" id="checkout" name="checkout" value="{{ data['checkout'] }}">
+		<input type="hidden" id="numofpets" name="numofpets" value="{{ data['numofpets'] }}">
+		<input type="hidden" id="type" name="type" value="{{ pettype }}">
+		<input type="hidden" id="breed" name="breed" value="{{ data['breed'] }}">
+		<input type="hidden" id="optional" name="optional" value="{{ data['optional'] }}">
+		<input type="hidden" id="nights" name="nights" value="{{ data['nights'] }}">
+		<input type="hidden" id="price" name="price" value="{{ data['price'] }}">
+		</td>
+	</tr>
+</table>
+</div>
+</form>
+{% endblock %}

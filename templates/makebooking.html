@@ -20,7 +20,7 @@
         <td colspan="2" class="makebooking_form">
 		<label>Title:</label><br>
 		<select name="title" id="title">
-		{% if session.get('user') %}	
+		{% if session.get('user') and customerdata[0][3] %}	
 			{% if "Mrs" in customerdata[0][3] %}
 				<option value="Mr">Mr</option>
 				<option value="Mrs" selected>Mrs</option>

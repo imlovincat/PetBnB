@@ -72,9 +72,34 @@
 		<label for="type5"> Ferret</label><br>
 		<input type="checkbox" id="type6" name="type[]" value="Bird">
 		<label for="type6"> Bird</label><br>
-		<input type="checkbox" id="type7" name="type[]" value="other">
+		<input type="checkbox" id="type7" name="type[]" value="Reptile">
 		<label for="type7"> Reptile</label><br>
-		<br>
+		<input type="checkbox" id= "type8" value="other"><label for="type8"> Other </label>
+		<input style="display:none;" type="text" name="type[]" id="other">
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script>
+		//source: https://www.studentstutorial.com/jquery/onclick-checkbox-show-textbox.php
+		$(document).ready(function(){
+			$("input[type='checkbox']").change(function(){
+				if($(this).val()=="other")
+				{
+					$("#other").show();
+				}
+				else
+				{
+					$("#other").hide(); 
+				}
+			});
+		});
+		</script>
+		
+		
+		
+		
+		
+		<br><br>
 		<label>Accepted Pet size:</label><br>
 		<input type="checkbox" id="size1" name="size[]" value="1-5kg">
 		<label for="size1"> 1-5kg</label><br>
