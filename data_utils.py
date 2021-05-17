@@ -170,6 +170,32 @@ def petsitter_signup_data(user,data):
     except:
         print("Error")  
 
+def check_duplicate_petsitter_data(petsittername):
+    try:
+        with DBcm.UseDatabase(connection) as cursor:
+                SQL = """SELECT id FROM petsitter WHERE petsittername = %s"""
+                cursor.execute(SQL,(petsittername,),)
+                data  = cursor.fetchall()
+                if len(data) == 0:
+                    return True
+                else: return False
+    except:
+        print("Error") 
+
+def check_petsitter_access_data(petsittername,email):
+    try:    
+        with DBcm.UseDatabase(connection) as cursor:
+                SQL = """SELECT customer.id FROM customer
+                         INNER JOIN petsitter ON (petsitter.customerid = customer.id)
+                         WHERE petsitter.petsittername = %s AND customer.email = %s"""
+                cursor.execute(SQL,(petsittername,email,),)
+                data  = cursor.fetchall()
+                if len(data) == 0:
+                    return False
+                else: return True
+    except:
+        print("Error") 
+    
 def confirm_makebooking_data(user,data):
     try:
         createdBy = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
@@ -263,13 +289,27 @@ def make_payment_data(transactionID, bookingRef):
 
 
 def search_petsitter_data(data):
-    with DBcm.UseDatabase(connection) as cursor:
-        SQL = """SELECT * FROM petsitter
-                WHERE CONCAT(petsittername,country,city,town,address) LIKE %s
-                """
-        cursor.execute(SQL, (('%' + data['location'] + '%'),),)
-        return_data = cursor.fetchall()
-        return return_data
+    try:
+        SQL = """SELECT * FROM petsitter WHERE country = """
+        SQL += "'" + data['country'] + "'"
+        if data['location'] != '':
+            SQL += " AND CONCAT(petsittername,city,town,address) LIKE '%" + data['location'] +"%' "
+        if data['numofpet'] != '':
+            SQL += "AND petnums >= " + data['numofpet']
+        if data['pettype1'] != '':
+            SQL += " AND pettype LIKE '%" + data['pettype1'] + "%' "
+        if data['pettype2'] != '':
+            SQL += " AND pettype LIKE '%" + data['pettype2'] + "%' "  
+        if data['pettype3'] != '':
+            SQL += " AND pettype LIKE '%" + data['pettype3'] + "%' "
+        if data['pettype4'] != '':
+            SQL += " AND pettype LIKE '%" + data['pettype4'] + "%' "
+        with DBcm.UseDatabase(connection) as cursor:
+                cursor.execute(SQL)
+                return_data = cursor.fetchall()
+                return return_data
+    except:
+        print("Error")
         
 def view_petsitter_data(petsittername):
     with DBcm.UseDatabase(connection) as cursor:
@@ -279,6 +319,140 @@ def view_petsitter_data(petsittername):
         cursor.execute(SQL, (petsittername,),)
         data = cursor.fetchall()
         return data
+
+def petsitter_signed_data(email):
+    try:
+        with DBcm.UseDatabase(connection) as cursor:
+            SQL = """SELECT petsitter.id, petsitter.petsittername FROM petsitter
+                    INNER JOIN customer ON (petsitter.customerid = customer.id)
+                    WHERE customer.email = %s
+                    """
+            cursor.execute(SQL, (email,),)
+            data = cursor.fetchall()
+            return data
+    except:
+        print("Error")
+        
+def manages_petsitter_account_data(petsittername,email):
+    try:
+        with DBcm.UseDatabase(connection) as cursor:
+            SQL = """SELECT petsitter.* FROM petsitter
+                    INNER JOIN customer ON (petsitter.customerid = customer.id)
+                    WHERE petsitter.petsittername = %s AND customer.email = %s
+                    """
+            cursor.execute(SQL, (petsittername,email,),)
+            data = cursor.fetchall()
+            return data
+    except:
+        print("Error")
+
+def petsitter_booking_data(petsittername):
+    try:
+        with DBcm.UseDatabase(connection) as cursor:
+            SQL = """SELECT booking.* FROM booking
+                     INNER JOIN petsitter ON (booking.petSitterID = petsitter.id)
+                     WHERE petsitter.petsittername = %s AND booking.deleteflag = 0
+                  """
+            cursor.execute(SQL, (petsittername,),)
+            data = cursor.fetchall()
+            return data
+        
+    except:
+        print("Error")
+
+def booking_quantity_data(petsittername,status):
+    try:
+        with DBcm.UseDatabase(connection) as cursor:
+            SQL = """SELECT COUNT(*) FROM booking
+                     INNER JOIN petsitter ON (booking.petSitterID = petsitter.id)
+                     WHERE petsitter.petsittername = %s AND booking.status = %s AND booking.deleteflag = 0
+                  """
+            cursor.execute(SQL, (petsittername,status,),)
+            data = cursor.fetchall()
+            return data
+        
+    except:
+        print("Error")
+
+def access_booking_data(bookingRef, email, petsittername):
+    try:
+        with DBcm.UseDatabase(connection) as cursor:
+            SQL = """SELECT COUNT(*) FROM booking
+                     INNER JOIN petsitter ON (booking.petSitterID = petsitter.id)
+                     INNER JOIN customer ON (petsitter.customerid = customer.id)
+                     WHERE booking.bookingRef = %s AND customer.email = %s AND petsitter.petsittername = %s AND booking.deleteflag = 0
+                  """
+            cursor.execute(SQL, (bookingRef,email,petsittername),)
+            data = cursor.fetchall()
+        if data[0][0] > 0:
+            accessType = "petsitter"
+        else:
+            with DBcm.UseDatabase(connection) as cursor:
+                SQL = """SELECT COUNT(*) FROM booking
+                         INNER JOIN customer ON (booking.customerID = customer.id)
+                         WHERE booking.bookingRef = %s AND customer.email = %s AND booking.deleteflag= 0
+                      """
+                cursor.execute(SQL, (bookingRef,email, ),)
+                data = cursor.fetchall()
+            if data[0][0] > 0:
+                accessType = "customer"
+            else: accessType = "guest"    
+
+        return accessType
+        
+    except:
+        print("Error")
+
+def update_booking_data(bookingRef, accessType, status):
+    try:
+        print("try")
+        if "customer" in accessType or "petsitter" in accessType:
+            with DBcm.UseDatabase(connection) as cursor:
+                SQL = """UPDATE booking
+                         SET status = %s
+                         WHERE bookingRef = %s
+                      """
+                cursor.execute(SQL, (status,bookingRef,),)
+        print("updated")
+    except:
+        print("Error")
+
+
+def check_email_exists_data():
+    try:
+        with DBcm.UseDatabase(connection) as cursor:
+            SQL = """SELECT email FROM customer"""
+            cursor.execute(SQL)
+            data = cursor.fetchall()
+            return data
+    except:
+        print("Error")
+
+
+def list_pettype_data():
+    try:
+        with DBcm.UseDatabase(connection) as cursor:
+                SQL = """SELECT DISTINCT pettype FROM petsitter"""
+                cursor.execute(SQL)
+                data  = cursor.fetchall()
+                pettype = ['dog','cat']
+                lastEle = ['other']
+                newlist = []
+                while len(data) > 0:
+                    temp = data.pop()
+                    templist = str_to_list(temp[0])
+                    while len(templist) > 0:
+                        tempElement = templist.pop()
+                        if tempElement.lower() not in newlist and tempElement.lower() not in pettype and tempElement.lower() not in lastEle and tempElement != "":
+                            newlist.append(tempElement.lower())
+                newlist.sort()
+                pettype.extend(newlist)
+                pettype.extend(lastEle)
+                return pettype
+                    
+    except:
+        print("Error")
+
 
 def str_to_list(data):
     i = 2

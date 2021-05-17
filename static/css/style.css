@@ -62,9 +62,57 @@ table.showbox {
 	width: 800px;
 }
 
+table.searchbox {
+	border-spacing: 0px 0px;
+	background-color: lightgray;
+	width: 800px;
+}
+
+table.account_title {
+	border-spacing: 0px 0px;
+	width: 800px;
+}
+
+td.account_title_left {
+	font-size: 22px;
+	text-align: left;
+	padding-bottom:15px;
+	vertical-align: bottom;
+}
+
+td.account_title_right {
+	font-size: 12px;
+	text-align: right;
+	vertical-align: text-top;
+	padding-bottom:15px;
+}
+
 td.left {
 	width: 200px;
 	padding: 20px;
+}
+
+div.image_not_found {
+	height: 200px;
+	width: 200px;
+	background-image: url("/static/images/petsitter2.jpg");	
+	background-repeat: no-repeat;
+}
+
+div.image_avatar {
+	height: 80px;
+	width: 80px;
+	background-image: url("/static/images/petsitter1.jpg");	
+	background-repeat: no-repeat;
+}
+
+div.image_side_by_side {
+	height: 200px;
+	width: 200px;
+	background-image: url("/static/images/petsitter2.jpg");	
+	background-repeat: no-repeat;
+	display: inline-block;
+	vertical-align: top;
 }
 
 td.petsittername {
@@ -356,6 +404,25 @@ td.completebooking_review {
 	line-height: 3;
 }
 
+
+input.signup_submit {
+	font-size: 14;
+	border-radius: 8px;
+	outline: none;
+    border: none;
+    width: 140px;
+    height: 60px;
+	cursor: pointer;
+    background-color: lightgray;
+    text-decoration:none;
+    color: black;
+}
+
+input.signup_submit:hover {
+	background-color: gray;
+    color: white;
+}
+
 td.completebooking_button {
 	padding-top: 30px;
 	padding-bottom: 30px;
@@ -429,6 +496,56 @@ td.viewaccount_button_space {
 	text-align: right;
 }
 
+td.signup_left {
+	padding-top: 30px;
+	text-align: right;
+	line-height: 3;
+	color: black;
+	font-size: 14px;
+}
+
+td.signup_right {
+	padding-top: 30px;
+	text-align: left;
+	line-height: 3;
+	color: black;
+	font-size: 14px;
+}
+
+td.boxtopic {
+	padding-top: 30px;
+	padding-left: 30px;
+	text-align: left;
+	color: black;
+	font-size: 20px;
+	line-height: 3;
+}
+
+td.upload_box {
+	padding-top: 30px;
+	text-align: center;
+	color: black;
+	font-size: 20px;
+}
+
+td.signuppetsitter_form {
+	padding-top: 30px;
+	padding-bottom: 30px;
+	padding-left: 150px;
+	text-align: left;
+	color: black;
+	font-size: 20px;
+	line-height: 1.5;
+}
+
+td.topic {
+	padding-top: 30px;
+	padding-bottom: 30px;
+	text-align: center;
+	color: black;
+	font-size: 25px;
+	line-height: 3;
+}
 
 button.viewaccount_button {
 	font-size: 14;
@@ -467,6 +584,52 @@ td.viewbooking_print {
 	text-align: center;
 }
 
+td.search_top {
+	padding-bottom: 15px;
+	text-align: left;
+	color: black;
+	font-size: 20px;
+}
+
+td.search_left {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: right;
+	color: black;
+	font-size: 14px;
+}
+
+td.search_right {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: left;
+	color: black;
+	font-size: 14px;
+}
+
+td.search_bottom {
+	padding-top: 15px;
+	text-align: center;
+}
+
+input.search_button {
+	font-size: 30;
+	border-radius: 8px;
+	outline: none;
+    border: none;
+    width: 140px;
+    height: 40px;
+	cursor: pointer;
+    background-color: gray;
+    text-decoration:none;
+    color: white;
+}
+
+input.search_button:hover {
+	background-color: black;
+    color: white;
+}
+
 
 button.viewbooking_button {
 	font-size: 14;
@@ -484,4 +647,97 @@ button.viewbooking_button {
 button.viewbooking_button:hover {
 	background-color: gray;
     color: white;
+}
+
+button.cancel {
+	font-size: 14;
+	border-radius: 8px;
+	outline: none;
+    border: none;
+    width: 150px;
+    height: 40px;
+	cursor: pointer;
+    background-color: #ff99cc;
+    text-decoration:none;
+    color: black;
+}
+
+button.cancel:hover {
+	background-color: red;
+    color: white;
+}
+
+button.confirm {
+	font-size: 14;
+	border-radius: 8px;
+	outline: none;
+    border: none;
+    width: 150px;
+    height: 40px;
+	cursor: pointer;
+    background-color: #66ccff;
+    text-decoration:none;
+    color: black;
+}
+
+button.confirm:hover {
+	background-color: blue;
+    color: white;
+}
+
+button.complete {
+	font-size: 14;
+	border-radius: 8px;
+	outline: none;
+    border: none;
+    width: 150px;
+    height: 40px;
+	cursor: pointer;
+    background-color: #ccffcc;
+    text-decoration:none;
+    color: black;
+}
+
+button.complete:hover {
+	background-color: green;
+    color: white;
+}
+
+td.searchbox_top {
+	padding-top: 30px;
+	padding-left: 50px;
+	padding-bottom: 15px;
+	text-align: left;
+	color: black;
+	font-size: 20px;
+}
+
+td.searchbox_left {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: right;
+	color: black;
+	font-size: 14px;
+}
+
+td.searchbox_right {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: left;
+	color: black;
+	font-size: 14px;
+}
+
+td.searchbox_bottom {
+	padding-top: 15px;
+	padding-bottom: 30px;
+	text-align: center;
+}
+
+div.error {
+	padding-top: 100px;
+	padding-bottom: 80px;
+	text-align: center;
+	color: black;
+	font-size: 40px;
 }

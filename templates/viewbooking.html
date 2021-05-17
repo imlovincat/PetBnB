@@ -1,33 +1,121 @@
 {% extends "base.html" %}
 
 {% block the_content %}
-<div>
-<p>
-Booking Ref: {{ bookingRef }}<br>
-Status: {{ data[0][0] }}
-</p>
+<script>
+function cancelButton() {
+	var proceed = confirm("Are you sure you want to proceed?");
+	if (proceed) {
+	  window.open("/cancelbooking/{{ bookingRef }}",'_self');
+	} 
+	else {
+	  //don't proceed
+	}
+}
+function confirmButton() {
+	var proceed = confirm("Are you sure you want to proceed?");
+	if (proceed) {
+	  window.open("/confirmbooking/{{ bookingRef }}",'_self');
+	} 
+	else {
+	  //don't proceed
+	}
+}
+function completeButton() {
+	var proceed = confirm("Are you sure you want to proceed?");
+	if (proceed) {
+	  window.open("/completebooking/{{ bookingRef }}",'_self');
+	} 
+	else {
+	  //don't proceed
+	}
+}
+ function printDiv() {
+            var divContents = document.getElementById("content").innerHTML;
+            var a = window.open('', '', 'height=500, width=500');
+            a.document.write('<html>');
+            a.document.write('<body > <h1>PetBnB Booking <br>');
+            a.document.write(divContents);
+            a.document.write('</body></html>');
+            a.document.close();
+            a.print();
+}
+
+</script>
+<div id="content">
+<table class="account_title">
+	<tr>
+		<td class="account_title_left">
+			Status: {{ data[0][0] }}
+		</td>
+		<td  class="account_title_right">
+		{% if "petsitter" in accessType %}
+			{% if "Pending" in data[0][0] %}
+				<button class="cancel" onclick="cancelButton()">Cancel Booking</button>
+				{% if checkin >= today %}
+					<button class="confirm" onclick="confirmBox()">Confirm Booking</button>
+				{% endif %}
+			{% elif "Confirmed" in data[0][0] %}
+				<button class="cancel" onclick="cancelButton()">Cancel Booking</button>
+				{% if today >= checkin %}
+					<button class="complete" onclick="completeBox()">Complete Booking</button>
+				{% endif %}
+			{% endif %}
+		{% elif "customer" in accessType %}
+			{% if "Pending" in data[0][0] %}
+				{% if checkin > today %}
+					<button class="cancel" onclick="cancelButton()">Cancel Booking</button>
+				{% endif %}
+			{% elif "Confirmed" in data[0][0] %}
+				{% if checkin > today %}
+					<button class="cancel" onclick="cancelButton()">Cancel Booking</button>
+				{% endif %}
+			{% endif %}
+		{% endif %}
+		</td>
+	</tr>
+</table>
+
 <table class="showbox">
   <tr >
 	<td class="viewbooking_details">
-	Title: {{ data[0][1] }}<br>
-	First Name: {{ data[0][2] }}<br>
-	Surname: {{ data[0][3] }}<br>
+	Booking Ref: {{ bookingRef }}
+	<hr>
+	Customer: {{ data[0][1] }}, {{ data[0][2] }} {{ data[0][3] }}<br>
+	Email: {{ data[0][5] }}<br>
+	{% if data[0][4] | length %}
+		Contact Number: {{ data[0][4] }}<br>
+	{% endif %}
 	<hr>
 	Pet Sitter: {{ data[0][15] }}<br>
 	Location: {{ data[0][21] }} {{ data[0][20] }} {{ data[0][19] }} {{ data[0][18] }}<br>
-	Contact Email: {{ data[0][16] }} <br>
-	Hotline: {{ data[0][17] }} <br>
-	Total Price: €{{ data[0][8] }}<br>
+	Email: {{ data[0][16] }} <br>
+	{% if data[0][17] | length %}
+		Contact Number: {{ data[0][17] }} <br>
+	{% endif %}
+	<hr>
 	Date period: {{ data[0][6] }} to {{ data[0][7] }}<br>
+	Total Price: €{{ data[0][8] }}<br>
+	Payment Method: {{ data[0][9] }} <br>
 	Number of pets: {{ data[0][10] }}<br>
-	The type of pets: {{ data[0][11] }}<br>
-	the Name/breed of pets: {{ data[0][12] }}<br>
-	Addition details: {{ data[0][13] }}<br>
+	The type of pets:&nbsp;
+	{% for row in pettype %}
+		{{ row }}
+		{% if not loop.last %}, {% endif %}
+	{% endfor %}
+	<br>
+	{% if data[0][12] | length %}
+		the Name/breed of pets:<br>
+		<textarea class="completebooking_textarea" cols="80" rows="{{ ( data[0][12] | wordwrap(80)).count('\n') + 1}}" disabled>{{ data[0][12] | wordwrap(80)}}</textarea><br>
+	{% endif %}
+	{% if data[0][13] | length %}
+	Addition details:<br>
+	<textarea class="completebooking_textarea" cols="80" rows="{{ ( data[0][13] | wordwrap(80)).count('\n') + 1}}" disabled>{{ data[0][13] | wordwrap(80)}}</textarea><br>
+	{% endif %}
 	</td>
   </tr>
   <tr>
 	<td class="viewbooking_print">
-	<button class="viewbooking_button">Print</button><br>
+	<button class="viewbooking_button" onclick="printDiv()">Print</button><br>
 	</td>
   </tr>
 </table>

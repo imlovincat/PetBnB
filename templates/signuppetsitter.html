@@ -4,9 +4,15 @@
 
 <form method="POST" action="/signuppetsitterform">
 <div>
-<table>
+<table class="showbox">
+	<tr>
+		<td class="topic">
+			Sign up Pet sitter account
+			<hr>
+		</td>
+	</tr>
     <tr>
-        <td>
+        <td class="signuppetsitter_form">
 		<label>Pet Sitter Name:</label><br>
 		<input type="text" id="petsittername" name="petsittername" required><br>
 		<br>
@@ -79,6 +85,7 @@
 		
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		
 		<script>
 		//source: https://www.studentstutorial.com/jquery/onclick-checkbox-show-textbox.php
 		$(document).ready(function(){
@@ -94,10 +101,6 @@
 			});
 		});
 		</script>
-		
-		
-		
-		
 		
 		<br><br>
 		<label>Accepted Pet size:</label><br>
@@ -134,13 +137,11 @@
 		<input type="radio" id="transport2" name="transport" value="0" checked>
 		<label for="transport2"> No</label><br>
 		<br>
-		<input type="file" name="files[]" accept="image/jpg, image/png" max="6" multiple disabled><br>
-		<br>
 		</td>
     </tr>
 	<tr>
-		<td>
-		<input type="submit" value="Submit">
+		<td class="viewpetbnbbutton">
+		<input type="submit" value="Submit" class="signup_submit">
 		</td>
 	</tr>
 </table>

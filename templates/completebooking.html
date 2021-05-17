@@ -1,7 +1,20 @@
 {% extends "base.html" %}
 
 {% block the_content %}
-<div>
+<script>
+ function printDiv() {
+            var divContents = document.getElementById("content").innerHTML;
+            var a = window.open('', '', 'height=500, width=500');
+            a.document.write('<html>');
+            a.document.write('<body > <h1>PetBnB Booking <br>');
+            a.document.write(divContents);
+            a.document.write('</body></html>');
+            a.document.close();
+            a.print();
+}
+
+</script>
+<div id="content">
 <p> Booking Status: in progress <br>
 <table class = "showbox">
 	<tr>
@@ -53,7 +66,7 @@
 	</tr>
 	<tr>
 		<td class="completebooking_button">
-		<button class="completebooking_print">Print</button>
+		<button class="completebooking_print" onclick="printDiv()">Print</button>
 		</td>
 	</tr>
 </table>

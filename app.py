@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, session, redirect,url_for, make_response, jsonify
 from data_utils import *
 from datetime import timedelta, datetime, date
-import time
+import os.path
 import os
+from os import path
+
+import time
 import models
 import paymentprocessing
 
@@ -17,11 +20,21 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
 @app.route("/")
 def display_homepage():
     session['url'] = ""
+    pettype = list_pettype_data()
     return render_template(
         "index.html",
         the_title="Project - PetBnB",
         the_opening_title="Main Screen",
+        pettype = pettype,
 
+    )
+
+@app.route("/error")
+def petbnb_error_page():
+    return render_template(
+        "error.html",
+        the_title="Project - PetBnB",
+        the_opening_title="Error Screen",
     )
 
 @app.route("/loginpage")
@@ -46,10 +59,12 @@ def petbnb_logout():
 
 @app.route("/signup")
 def petbnb_signup():
+    data = check_email_exists_data()
     return render_template(
         "signup.html",
         the_title="Project - PetBnB",
         the_opening_title="Sign Up Screen",
+        data = data,
     )
 
 @app.route("/signuppetsitter")
@@ -69,7 +84,10 @@ def petbnb_sign_up_petsitter():
 def petbnb_view_account():
     if session.get('user'): 
         data = view_account_data(session['user'])
+        petsitter_data = petsitter_signed_data(session['user'])
+        signed_petsitter_num = len(petsitter_data)    
         booking = view_booking_data(session['user'])
+        booking_num = len(booking)
         email = session['user']
         return render_template(
             "viewaccount.html",
@@ -77,23 +95,72 @@ def petbnb_view_account():
             the_opening_title="View Account",
             data = data,
             email = email,
-            booking = booking
+            booking = booking,
+            petsitter_data = petsitter_data,
+            signed_petsitter_num = signed_petsitter_num,
+            booking_num = booking_num,
         )  
     else:
         session['url'] = "viewaccount"
+        return redirect('/login')
+        
+@app.route("/viewpetsitteraccount/<petsittername>", methods=['GET'])
+def petbnb_view_petsitter_account(petsittername):
+    if session.get('user'):
+        petsitter_data = petsitter_signed_data(session['user'])
+        email = session['user']
+        signed_petsitter_num = len(petsitter_data) 
+        data = manages_petsitter_account_data(petsittername,email)
+        if len(data) == 0:
+            return "Error"
+        booking = petsitter_booking_data(petsittername)
+        booking_num = len(booking)
+        completed_booking = booking_quantity_data(petsittername,"Completed")
+        pending_booking = booking_quantity_data(petsittername,"Pending")
+        cancel_booking = booking_quantity_data(petsittername,"Canceled")
+        
+        return render_template(
+            "viewpetsitteraccount.html",
+            the_title="Project - PetBnB",
+            the_opening_title="View Pet Sitter Account",
+            data = data,
+            email = email,
+            petsitter_data = petsitter_data,
+            signed_petsitter_num = signed_petsitter_num,
+            booking = booking,
+            booking_num = booking_num,
+            completed_booking = completed_booking,
+            pending_booking = pending_booking,
+            cancel_booking = cancel_booking,
+            
+        )  
+        
+        
+    else:
         return redirect('/login')
         
 @app.route("/viewbooking/<data>",  methods=['GET'])
 def petbnb_view_booking(data):
     bookingRef = data;
     data = view_booking_by_ref_data(bookingRef)
-    print(data)
+    petsittername = data[0][15]
+    if session.get('user'):
+        email = session['user']
+    else: email = ""
+    accessType = access_booking_data(bookingRef, email, petsittername)
+    pettype = str_to_list(data[0][11])
+    today = datetime.today().strftime('%Y-%m-%d')
+    checkin = data[0][6].strftime('%Y-%m-%d')
     return render_template(
         "viewbooking.html",
         the_title="Project - PetBnB",
         the_opening_title="View Booking",
         bookingRef = bookingRef,
         data = data,
+        accessType = accessType,
+        pettype = pettype,
+        today = today,
+        checkin = checkin,
     )
 
 
@@ -174,16 +241,70 @@ def process_for_confirmbooking_form():
             bookingRef = bookingRef
         )  
 
+@app.route("/cancelbooking/<data>", methods=["GET"])
+def process_for_canceledbooking_form(data):
+    if session.get('user'):
+        bookingRef = data
+        data = view_booking_by_ref_data(bookingRef)
+        email = session['user']
+        petsittername = data[0][15]
+        status = data[0][0]
+        today = datetime.today().strftime('%Y-%m-%d')
+        checkin = data[0][6].strftime('%Y-%m-%d')
+        accessType = access_booking_data(bookingRef, email, petsittername)
+        newstatus = "Canceled"
+        if ("petsitter" in accessType) and ("Pending" in status or "Confirmed" in status):
+            update_booking_data(bookingRef, accessType, newstatus)
+        elif (checkin > today) and ("customer" in accessType) and ("Pending" in status or "Confirmed" in status):
+            update_booking_data(bookingRef, accessType, newstatus)
+        newUrl = "/viewbooking/" + bookingRef
+        return redirect(newUrl)
+            
+            
+@app.route("/confirmbooking/<data>", methods=["GET"])
+def process_for_confirmedbooking_form(data):
+    if session.get('user'):
+        bookingRef = data
+        data = view_booking_by_ref_data(bookingRef)
+        email = session['user']
+        petsittername = data[0][15]
+        status = data[0][0]
+        today = datetime.today().strftime('%Y-%m-%d')
+        checkin = data[0][6].strftime('%Y-%m-%d')
+        accessType = access_booking_data(bookingRef, email, petsittername)
+        newstatus = "Confirmed"
+        if (checkin >= today) and ("petsitter" in accessType or "customer" in accessType) and ("Pending" in status):
+            update_booking_data(bookingRef, accessType, newstatus)
+        newUrl = "/viewbooking/" + bookingRef
+        return redirect(newUrl)        
+    
+@app.route("/completebooking/<data>", methods=["GET"])
+def process_for_completedbooking_form(data):
+    if session.get('user'):
+        bookingRef = data
+        data = view_booking_by_ref_data(bookingRef)
+        email = session['user']
+        petsittername = data[0][15]
+        status = data[0][0]
+        today = datetime.today().strftime('%Y-%m-%d')
+        checkin = data[0][6].strftime('%Y-%m-%d')
+        accessType = access_booking_data(bookingRef, email, petsittername)
+        newstatus = "Completed"
+        if (today >= checkin) and ("petsitter" in accessType or "customer" in accessType) and ("Confirmed" in status):
+            update_booking_data(bookingRef, accessType, newstatus)
+        newUrl = "/viewbooking/" + bookingRef
+        return redirect(newUrl)   
 
 @app.route("/searchform", methods=["POST"])
 def process_search_form():
     data = request.form
+    
     return render_template(
         "searchresult.html",
         the_title="Project - PetBnB",
         the_opening_title="Search Result",
         data = search_petsitter_data(data),
-        the_num = len(search_petsitter_data(data)),     
+        the_num = len(search_petsitter_data(data)),
     )  
     
 @app.route("/viewpetsitter/<data>", methods=['GET'])
@@ -214,8 +335,12 @@ def process_for_new_customer_signup_form():
 @app.route("/signuppetsitterform", methods=["POST"])
 def process_for_new_petsitter_signup_form():
     data = request.form
-    petsitter_signup_data(session['user'],data)
-    return redirect('/')
+    petsittername = data['petsittername']
+    if check_duplicate_petsitter_data(petsittername):
+        petsitter_signup_data(session['user'],data)
+        newURL = "/upload/" + petsittername
+        return redirect(newURL)
+    else: return redirect('/signupetsitter')
 
 @app.route("/loginform", methods=["POST"])
 def process_for_customer_login_form():
@@ -236,6 +361,10 @@ def process_for_customer_login_form():
 if __name__ == '__main__':
     app.run(debug=True)
 
+
+
+
+
 @app.route("/payment", methods=["POST"])
 def process_for_credit_card_payment(): 
     data = request.form
@@ -244,14 +373,9 @@ def process_for_credit_card_payment():
     card.number = data['number']
     card.expiration_date = data['expiration_date']
     card.code = data['code']
-
     response = paymentprocessing.charge_credit_card(card, amount)
-    
-    time.sleep(3)
-    
     print(response.is_success)
     print(response.messages)
-    
     
     if response.is_success:
         petsitter = view_petsitter_data(data['petsitter'])
@@ -262,9 +386,7 @@ def process_for_credit_card_payment():
         else: user = ""
     
         transactionID = response.messages[0][-11:-1]
-    
         bookingRef = confirm_makebooking_data(user,data)
-        
         make_payment_data(transactionID, bookingRef)
         
         return render_template(
@@ -304,37 +426,72 @@ def process_for_credit_card_payment_testing():
     
     
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp'])
- 
+
+@app.route('/picture/<data>', methods=['GET']) 
+def petsitter_picture_form(data):
+    if session.get('user'):
+        email = session['user']
+        petsittername = data
+        if check_petsitter_access_data(petsittername,email):
+            return render_template(
+            "upload.html",
+            the_title="Project - PetBnB",
+            the_opening_title="Pet Sitter Picture Upload",
+            petsittername = data,
+        )
+        else: return redirect('/login') 
+    else: return redirect('/login')
+    
+        
+
+    
+    
+
+
+#Source: https://blog.csdn.net/dcrmg/article/details/81987808
 def allowed_file(filename):
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp'])
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 app.send_file_max_age_default = timedelta(seconds=1)
- 
-
-@app.route('/upload', methods=['POST', 'GET']) 
-def upload():
-    if request.method == 'POST':
-        f = request.files['file']
- 
-        if not (f and allowed_file(f.filename)):
-            return jsonify({"error": 1001, "msg": "only accept file types: png,PNG,jpg,JPG,bmp"})
- 
-        f.filename = "1" + ".jpg"
-        user_input = request.form.get("name")
-        basepath = os.path.dirname(__file__)
- 
-        upload_path = os.path.join(basepath, 'static/images', secure_filename(f.filename))
-
-        # 注意：没有的文件夹一定要先创建，不然会提示没有该路径
-        # upload_path = os.path.join(basepath, 'static/images','test.jpg')  #注意：没有的文件夹一定要先创建，不然会提示没有该路径
+@app.route('/upload/<data>', methods=['POST', 'GET']) 
+def upload(data):
+    petsittername = data
+    data = view_petsitter_data(petsittername)
+    petsitterID = data[0][0]
+    basepath = os.path.dirname(__file__)
+    
+    if request.files['file1']:
+        file1 = request.files['file1']
+        if not (file1 and allowed_file(file1.filename)):
+            return "only accept file types: png,PNG,jpg,JPG,bmp"
+        file1.filename = str(petsitterID) + "a" + ".jpg"
+        upload_path = os.path.join(basepath, 'static/images', secure_filename(file1.filename))
+        file1.save(upload_path)
         
-        f.save(upload_path)
- 
-        # 使用Opencv转换一下图片格式和名称
-        img = cv2.imread(upload_path)
-        cv2.imwrite(os.path.join(basepath, 'static/images', 'test.jpg'), img)
- 
-        return render_template('upload_ok.html',userinput=user_input,val1=time.time())
- 
-    return render_template('upload.html')
+    if request.files['file2']:
+        file2 = request.files['file2']
+        if not (file2 and allowed_file(file2.filename)):
+            return "only accept file types: png,PNG,jpg,JPG,bmp"
+        file2.filename = str(petsitterID) + "b" + ".jpg"
+        upload_path = os.path.join(basepath, 'static/images', secure_filename(file2.filename))
+        file2.save(upload_path)
+        
+    if request.files['file3']:
+        file3 = request.files['file3']
+        if not (file3 and allowed_file(file3.filename)):
+            return "only accept file types: png,PNG,jpg,JPG,bmp"
+        file3.filename = str(petsitterID) + "c" + ".jpg"
+        upload_path = os.path.join(basepath, 'static/images', secure_filename(file3.filename))
+        file3.save(upload_path)
+    
+    if request.files['file4']:
+        file4 = request.files['file4']
+        if not (file4 and allowed_file(file4.filename)):
+            return "only accept file types: png,PNG,jpg,JPG,bmp"
+        file4.filename = str(petsitterID) + "d" + ".jpg"
+        upload_path = os.path.join(basepath, 'static/images', secure_filename(file4.filename))
+        file4.save(upload_path)
+    
+    newURL = "/viewpetsitteraccount/" + petsittername
+    return redirect(newURL)

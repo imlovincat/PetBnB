@@ -3,23 +3,102 @@
 {% block the_content %}
 <div class="search">
 <form method="POST" action="/searchform">
-<table>
+<table width="100%">
+	<tr>
+		<td colspan="2" class="search_top">
+		I'm looking for
+		</td>
+	</tr>
     <tr>
-        <td>
-		
+        <td class="search_left">
+		<label>Country: </label>
+		</td>
+		<td class="search_right">
 		<select id="country" name="country">
-		<option value="ireland">Ireland</option>
+		<option value="Ireland">Ireland</option>
+		<option value="United Kingdom">United Kingdom</option>
 		</select>
-		
-		<input type="text" id="location" name="location" placeholder="Location">
-		
+		<input type="text" id="location" name="location" placeholder="Location, Pet Sitter Name">
 		</td>
     </tr>
+	<tr>
+		<td class="search_left">
+			<label> Pet Types: </label>
+		</td>
+		<td class="search_right">
+			<select id="numofpet" name="numofpet" onchange="myFunction()">
+			<option value="">Nums</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4+</option>
+			</select>
+		
+			<select id="pettype1" name="pettype1">
+			<option value="">Pet Type 1</option>
+			{% for row in pettype %}
+			<option value="{{ row }}">{{ row }}</option>
+			{% endfor %}
+			</select>
+			
+			<select id="pettype2" name="pettype2" style="display:none;">
+			<option value="">Pet Type 2</option>
+			{% for row in pettype %}
+			<option value="{{ row }}">{{ row }}</option>
+			{% endfor %}
+			</select>
+			
+			<select id="pettype3" name="pettype3" style="display:none;">
+			<option value="">Pet Type 3</option>
+			{% for row in pettype %}
+			<option value="{{ row }}">{{ row }}</option>
+			{% endfor %}
+			</select>
+			
+			<select id="pettype4" name="pettype4" style="display:none;">
+			<option value="">Pet Type 4</option>
+			{% for row in pettype %}
+			<option value="{{ row }}">{{ row }}</option>
+			{% endfor %}
+			</select>
+
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		
+			<script>
+			function myFunction(){
+				if(document.getElementById("numofpet").value == "2")
+				{
+					$("#pettype2").show();
+					$("#pettype3").hide(); 
+					$("#pettype4").hide(); 
+				}
+				else if(document.getElementById("numofpet").value == "3")
+				{
+					$("#pettype2").show();
+					$("#pettype3").show();
+					$("#pettype4").hide();
+				}
+				else if(document.getElementById("numofpet").value == "4")
+				{
+					$("#pettype2").show();
+					$("#pettype3").show();
+					$("#pettype4").show();
+				}
+				else
+				{
+					$("#pettype2").hide(); 
+					$("#pettype3").hide(); 
+					$("#pettype4").hide(); 
+				}
+			};
+			</script>
+		</td>
+	</tr>
+
 	
 	<tr>
-		<td>
-		<input type="submit" value="Search">
-		<input type="reset" value="Clear">
+		<td colspan="2" class="search_bottom">
+		<input type="submit" value="Search" class="search_button">
 		</td>
 	</tr>
 </table>
