@@ -1,17 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Flask上传图片演示</title>
-</head>
-<body>
-    <h1>使用Flask上传本地图片并显示示例一</h1>
-    <form action="" enctype='multipart/form-data' method='POST'>
-        <input type="file" name="file" style="margin-top:20px;"/>
-        <br>
-        <i>请输入你当前的心情（开心、超开心、超超开心）：</i>
-        <input type="text" class="txt_input" name="name"  value="超超开心" style="margin-top:10px;"/>
-        <input type="submit" value="上传" class="button-new" style="margin-top:15px;"/>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block the_content %}
+<div>
+<form action="/upload/{{ petsittername }}" enctype='multipart/form-data' method='POST'>
+<table class="showbox">
+	<tr>
+		<td class="boxtopic">
+			Upload Picture
+		</td>
+	</tr>
+    <tr>
+        <td class="upload_box">
+		<label>Picture 1 : </label>
+		<input type="file" name="file1"><br><br>
+		<label>Picture 2 : </label>
+		<input type="file" name="file2"><br><br>
+		<label>Picture 3 : </label>
+		<input type="file" name="file3"><br><br>
+		<label>Picture 4 : </label>
+		<input type="file" name="file4"><br><br>
+		</td>
+    </tr>
+	<tr>
+		<td class="viewpetbnbbutton">
+		<input type="submit" value="Upload" class="signup_submit">
+		</td>
+	</tr>
+</table>
+</form>
+</div>
+{% endblock %}

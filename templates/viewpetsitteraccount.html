@@ -24,17 +24,17 @@
 <table class="showbox">
   <tr >
 	<td class="viewaccount_customer">
-	Title: {{ data[0][2] }}<br>
-	First Name:  {{ data[0][0] }}<br>
-	Surname:  {{ data[0][1] }}<br>
-	Date of Birth:  {{ data[0][3] }} <br>
-	Contact number:  {{ data[0][5] }}<br>
-	Address:  {{ data[0][4] }}<br>
+	Pet Service Name: {{ data[0][2] }}<br>
+	Location: {{ data[0][8] }} {{ data[0][7] }} {{ data[0][6] }} {{ data[0][5] }}<br>
+	Completed Booking: {{ completed_booking[0][0] }} <br>
+	Pending Booking: {{ pending_booking[0][0] }} <br>
+	Canceled Booking: {{ cancel_booking[0][0] }} <br>
 	</td>
   </tr>
 </table>
 <br>
 <br>
+
 
 {% if booking_num > 0 %}
 
@@ -43,19 +43,19 @@
 	<table class="showbox">
 	  <tr >
 		<td class="viewaccount_booking" rowspan="2">
-		Booking Ref: {{ row[0] }}<br>
-		Pet Sitter: {{ row[16] }}<br>
-		Location: {{ row[20] }} {{ row[19] }} {{ row[18] }} {{ row[17] }}<br>
-		Date period: {{ row[8] }} to {{ row[9] }}<br>
-		Status: {{ row[2] }}
+		Booking Ref: {{ row[1] }}<br>
+		Customer: {{ row[5] }}, {{ row[6] }} {{ row[7] }}<br>
+		Payment Method: {{ row[13] }} <br>
+		Date period: {{ row[10] }} to {{ row[11] }}<br>
+		Status: {{ row[4] }}
 		</td>
 		<td class="viewaccount_price">
-		Total Price: €{{ row[10] }}<br>
+		Total Price: €{{ row[12] }}<br>
 		</td>
 	  </tr>
 	  <tr>
 		<td class="viewaccount_button_space">
-		<a href="/viewbooking/{{ row[0] }}"><button class="viewaccount_button">more details</button></a><br>
+		<a href="/viewbooking/{{ row[1] }}"><button class="viewaccount_button">more details</button></a><br>
 		</td>
 	  </tr>
 	</table>
@@ -63,7 +63,6 @@
 	{% endfor %}
 	
 {% endif %}
-
 
 
 </div>

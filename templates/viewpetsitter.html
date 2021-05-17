@@ -4,7 +4,7 @@
 <div>
 <table class="viewpetbnb">
   <tr >
-    <td rowspan="3" class="viewpetsitterphoto"><img src="/static/images/petsitter.png" width="80" height="80"></td>
+    <td rowspan="3" class="viewpetsitterphoto"><div class="image_avatar"><img src="/static/images/{{ data[0][0] }}a.jpg" width="80" height="80" onerror="this.style.display = 'none'"></div></td>
     <td class="viewpetsittername">{{ data[0][2] }}</td>
   </tr>
   
@@ -17,7 +17,17 @@
   </tr>
   
   <tr>
-    <td colspan="2" class="viewpetbnbphoto"><img src="/static/images/petsitter.png" width="200" height="200">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/images/petsitter.png" width="200" height="200">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/images/petsitter.png" width="200" height="200"></td>
+    <td colspan="2" class="viewpetbnbphoto">
+	<div class="image_side_by_side">
+	<img src="/static/images/{{ data[0][0] }}b.jpg" width="200" height="200" onerror="this.style.display = 'none'">
+	</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<div class="image_side_by_side">
+	<img src="/static/images/{{ data[0][0] }}c.jpg" width="200" height="200" onerror="this.style.display = 'none'">
+	</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<div class="image_side_by_side">
+	<img src="/static/images/{{ data[0][0] }}d.jpg" width="200" height="200" onerror="this.style.display = 'none'">
+	</div>
+	</td>
   </tr>
   <tr>
     <td colspan="2" class="viewpetbnbtext">Description:<br>{{ data[0][9] }}<br><br><br></td>
