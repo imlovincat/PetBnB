@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect,url_for, make_response, jsonify
+from flask import Flask, flash,render_template, request, session, redirect,url_for, make_response, jsonify
 from data_utils import *
 from datetime import timedelta, datetime, date
 import os.path
@@ -16,6 +16,7 @@ import cv2
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
+app.send_file_max_age_default = timedelta(seconds=1)
 
 @app.route("/")
 def display_homepage():
@@ -74,7 +75,6 @@ def petbnb_sign_up_petsitter():
         return render_template(
             "signuppetsitter.html",
             the_title="Project - PetBnB",
-            the_opening_title="Sign up pet sitter Screen",
         )
     else :
         session['url'] = "signuppetsitter"
@@ -231,15 +231,8 @@ def process_for_confirmbooking_form():
     
     else:
         bookingRef = confirm_makebooking_data(user,data)
-        return render_template(
-            "completebooking.html",
-            the_title="Project - PetBnB",
-            the_opening_title="Booking completed",
-            data = data,
-            petsitter = petsitter,
-            pettype = pettype,
-            bookingRef = bookingRef
-        )  
+        newURL = "/viewbooking/" + bookingRef
+        return redirect(newURL)
 
 @app.route("/cancelbooking/<data>", methods=["GET"])
 def process_for_canceledbooking_form(data):
@@ -298,13 +291,14 @@ def process_for_completedbooking_form(data):
 @app.route("/searchform", methods=["POST"])
 def process_search_form():
     data = request.form
-    
+    pettype = list_pettype_data()
     return render_template(
         "searchresult.html",
         the_title="Project - PetBnB",
         the_opening_title="Search Result",
         data = search_petsitter_data(data),
         the_num = len(search_petsitter_data(data)),
+        pettype = pettype,
     )  
     
 @app.route("/viewpetsitter/<data>", methods=['GET'])
@@ -324,13 +318,32 @@ def process_viewpetsitter_form(data):
 @app.route("/signupform", methods=["POST"])
 def process_for_new_customer_signup_form():
     data = request.form
-    customer_signup_data(data)
-    return render_template(
-        "signupcomplete.html",
-        the_title="Project - PetBnB",
-        the_opening_title="Thanks for sign up",
-        the_email=data["email"],
-    )
+    email = data['email']
+    if data['password'] != data['repeatpassword']:
+        flash('password and repeat password can not match!')
+        return render_template(
+            "signup.html",
+            the_title="Project - PetBnB | Customer Sign up",
+            message2 = "not match!",
+            data = data,
+        )
+    
+    elif check_duplicated_email_data(email):
+
+        customer_signup_data(data)
+        session['user'] = data["email"]
+        return redirect('/')
+    else:
+        flash('email is used!'),
+        return render_template(
+            "signup.html",
+            the_title="Project - PetBnB | Customer Sign up",
+            message1 = "Email is used!",
+            data = data,
+        )
+    
+    
+    
 
 @app.route("/signuppetsitterform", methods=["POST"])
 def process_for_new_petsitter_signup_form():
@@ -340,7 +353,8 @@ def process_for_new_petsitter_signup_form():
         petsitter_signup_data(session['user'],data)
         newURL = "/upload/" + petsittername
         return redirect(newURL)
-    else: return redirect('/signupetsitter')
+    else: 
+        return redirect('/signupetsitter')
 
 @app.route("/loginform", methods=["POST"])
 def process_for_customer_login_form():
@@ -388,16 +402,9 @@ def process_for_credit_card_payment():
         transactionID = response.messages[0][-11:-1]
         bookingRef = confirm_makebooking_data(user,data)
         make_payment_data(transactionID, bookingRef)
+        newURL = "/viewbooking/" + bookingRef
         
-        return render_template(
-            "completebooking.html",
-            the_title="Project - PetBnB",
-            the_opening_title="Booking completed",
-            data = data,
-            petsitter = petsitter,
-            pettype = pettype,
-            bookingRef = bookingRef,
-        )  
+        return redirect(newURL)
         
     else:
         return "Error"
@@ -424,8 +431,92 @@ def process_for_credit_card_payment_testing():
     
     return messages
     
-    
+@app.route('/editaccount') 
+def modify_account_form():
+    if session.get('user'):
+        email = session['user']
+        data = view_account_data(session['user'])
+        return render_template(
+            "modify_account.html",
+            the_title="Project PetBnB | Modify Customer Account",
+            email = email,
+            data = data,
+        )
+    else: return redirect('/login')
 
+@app.route("/update_account", methods=["POST"])
+def process_update_account(): 
+    if session.get('user'):
+        data = request.form
+        email = session['user']
+        update_account_data(data,email)
+        return redirect('/viewaccount')
+    else: return redirect('/login')
+
+@app.route('/editpetsitteraccount/<petsittername>', methods=['GET']) 
+def modify_petsitter_account_form(petsittername):
+    if session.get('user'):
+        email = session['user']
+        data = view_petsitter_data(petsittername)
+        pettype = list_pettype_data()
+        return render_template(
+            "modify_petsitteraccount.html",
+            the_title="Project PetBnB | Modify Pet Sitter Account",
+            email = email,
+            data = data,
+            pettype = pettype,
+        )
+    else: return redirect('/login')
+
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp'])
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+@app.route('/update_petsitter_account', methods=['POST'])
+def process_update_petsitter_account():
+    data = request.form
+    if session.get('user'):
+        email = session['user']
+        petsittername = data['petsittername']
+        newUrl = "/viewpetsitter/" + petsittername
+        update_petsitter_account_data(data,email)
+        data = view_petsitter_data(petsittername)
+        petsitterID = data[0][0]
+
+        basepath = os.path.dirname(__file__)
+        if request.files['file1']:
+            file1 = request.files['file1']
+            if not (file1 and allowed_file(file1.filename)):
+                return "only accept file types: png,PNG,jpg,JPG,bmp"
+            file1.filename = str(petsitterID) + "a" + ".jpg"
+            upload_path = os.path.join(basepath, 'static/images', secure_filename(file1.filename))
+            file1.save(upload_path)
+            
+        if request.files['file2']:
+            file2 = request.files['file2']
+            if not (file2 and allowed_file(file2.filename)):
+                return "only accept file types: png,PNG,jpg,JPG,bmp"
+            file2.filename = str(petsitterID) + "b" + ".jpg"
+            upload_path = os.path.join(basepath, 'static/images', secure_filename(file2.filename))
+            file2.save(upload_path)
+            
+        if request.files['file3']:
+            file3 = request.files['file3']
+            if not (file3 and allowed_file(file3.filename)):
+                return "only accept file types: png,PNG,jpg,JPG,bmp"
+            file3.filename = str(petsitterID) + "c" + ".jpg"
+            upload_path = os.path.join(basepath, 'static/images', secure_filename(file3.filename))
+            file3.save(upload_path)
+        
+        if request.files['file4']:
+            file4 = request.files['file4']
+            if not (file4 and allowed_file(file4.filename)):
+                return "only accept file types: png,PNG,jpg,JPG,bmp"
+            file4.filename = str(petsitterID) + "d" + ".jpg"
+            upload_path = os.path.join(basepath, 'static/images', secure_filename(file4.filename))
+            file4.save(upload_path) 
+        return redirect(newUrl)
+    else: return redirect('/login')
 
 @app.route('/picture/<data>', methods=['GET']) 
 def petsitter_picture_form(data):
@@ -438,22 +529,11 @@ def petsitter_picture_form(data):
             the_title="Project - PetBnB",
             the_opening_title="Pet Sitter Picture Upload",
             petsittername = data,
-        )
+            )
         else: return redirect('/login') 
-    else: return redirect('/login')
-    
-        
-
-    
-    
+    else: return redirect('/login')   
 
 
-#Source: https://blog.csdn.net/dcrmg/article/details/81987808
-def allowed_file(filename):
-    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp'])
-    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-app.send_file_max_age_default = timedelta(seconds=1)
 @app.route('/upload/<data>', methods=['POST', 'GET']) 
 def upload(data):
     petsittername = data

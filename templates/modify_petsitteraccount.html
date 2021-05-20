@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+<script>
+		$(document).ready(function(){
+			$("input[type='checkbox']").change(function(){
+				if($(this).val()=="other")
+				{
+					$("#other").show();
+				}
+				else
+				{
+					$("#other").hide(); 
+				}
+			});
+		});
+</script>
+
+<form method="POST" action="/update_petsitter_account" enctype='multipart/form-data'>
+<div>
+<table class="petsittersignupbox">
+	<tr>
+		<td class="petsittersignup_topic">
+			<div class="topic_div">Update Pet sitter account</div>
+		</td>
+	</tr>
+    <tr>
+        <td class="petsittersignup_form">
+		<label>Pet Sitter Name:</label><br>
+		<input type="text" id="petsittername" name="petsittername" value="{{ data[0][2] }}" readonly><br>
+		<br>
+		<label>Contact email address:</label><br>
+		<input type="text" id="email" name="email" value="{{ data[0][3] }}" required><br>
+		<br>
+		<label>Contact number:</label><br>
+		<input type="text" id="phone" name="phone" value="{{ data[0][4] }}" required><br>
+		<br>
+		<label>Country:</label><br>
+		<select name="country" id="country" required>
+		<option value="{{ data[0][5] }}" selected>{{ data[0][5] }}</option>
+		<option value="United Kingdom" disabled>United Kingdom</option>
+		</select><br>
+		<br>
+		<label>City:</label><br>
+		<input type="text" id="city" name="city" value="{{ data[0][6] }}" required><br>
+		<br>
+		<label>Town:</label><br>
+		<input type="text" id="town" name="town" value="{{ data[0][7] }}" required><br>
+		<br>
+		<label>Street Address:</label><br>
+		<input type="text" id="street" name="street" value="{{ data[0][8] }}" required><br>
+		<br>
+		<label>Description:</label><br>
+		<textarea rows="4" cols="50" id="description" name="description" required>{{ data[0][9] }}</textarea><br>
+		<br>
+		<label>Price/per night (Euro):</label><br>
+		<input type="number" id="price" name="price" min="0", max="999" value="{{ data[0][10] }}" required><br>
+		<br>
+		<label>Sevice you can provide:</label><br>
+		<input type="checkbox" id="service1" name="service[]" value="accommodation" disabled checked>
+		<label for="service1"> Pet accommodation</label><br>
+		<input type="checkbox" id="service2" name="service[]" value="dogwalking" {% if 'dogwalking' in data[0][11]%}checked{% endif %}>
+		<label for="service2"> Dog walking</label><br>
+		<input type="checkbox" id="service3" name="service[]" value="daycare" {% if 'daycare' in data[0][11]%}checked{% endif %} >
+		<label for="service3"> Pet daycare</label><br>
+		<input type="checkbox" id="service4" name="service[]" value="delivery" {% if 'delivery' in data[0][11]%}checked{% endif %}>
+		<label for="service4"> Pet delivery</label><br>
+		<br>
+		<label>Number of pets that you can be watched at one time:</label><br>
+		<select name="numofpet" id="numofpet" required>
+		<option value="1" {% if '1' in data[0][12]|string %}selected{% endif %}>1</option>
+		<option value="2" {% if '2' in data[0][12]|string %}selected{% endif %}>2</option>
+		<option value="3" {% if '3' in data[0][12]|string %}selected{% endif %}>3</option>
+		<option value="4" {% if '4' in data[0][12]|string %}selected{% endif %}>4</option>
+		<option value="5" {% if '5' in data[0][12]|string %}selected{% endif %}>5</option>
+		<option value="6" {% if '6' in data[0][12]|string %}selected{% endif %}>6</option>
+		<option value="7" {% if '7' in data[0][12]|string %}selected{% endif %}>7</option>
+		<option value="8" {% if '8' in data[0][12]|string %}selected{% endif %}>8</option>
+		</select><br>
+		<br>
+		<label>Accepted Pet Types:</label><br>
+		{% for row in pettype %}
+		<input type="checkbox" name="type[]" value="{{ row }}" {% if row in data[0][13] %}checked{% endif %}>
+		<label>{{ row }}</label><br>
+		{% endfor %}
+		<input type="checkbox" value="other"><label>Other</label>
+		<input style="display:none;" type="text" name="type[]" id="other">
+		<br><br>
+		<label>Accepted Pet size:</label><br>
+		<input type="checkbox" id="size1" name="size[]" value="1-5kg" {% if '1-5kg' in data[0][14]%}checked{% endif %}>
+		<label for="size1"> 1-5kg</label><br>
+		<input type="checkbox" id="size2" name="size[]" value="6-10kg" {% if '6-10kg' in data[0][14]%}checked{% endif %}>
+		<label for="type2"> 6-10kg</label><br>
+		<input type="checkbox" id="size3" name="size[]" value="11-20kg" {% if '11-20kg' in data[0][14]%}checked{% endif %}>
+		<label for="type3"> 11-20kg</label><br>
+		<input type="checkbox" id="size4" name="size[]" value="21-40kg" {% if '21-40kg' in data[0][14]%}checked{% endif %}>
+		<label for="type4"> 21-40kg</label><br>
+		<input type="checkbox" id="size5" name="size[]" value="41kg+" {% if '41kg+' in data[0][14]%}checked{% endif %}>
+		<label for="type5"> 41kg+</label><br>
+		<br>
+		<label>The Types of house:</label><br>
+		<input type="radio" id="house1" name="house" value="apartment" {% if 'apartment' in data[0][15]%}checked{% endif %}>
+		<label for="house1"> Apartment</label><br>
+		<input type="radio" id="house2" name="house" value="detached" {% if 'detached' in data[0][15]%}checked{% endif %}>
+		<label for="house2"> Detached house</label><br>
+		<br>
+		<label>Outdoor area size:</label><br>
+		<input type="radio" id="outdoor1" name="outdoor" value="none" {% if 'none' in data[0][16]%}checked{% endif %}>
+		<label for="outdoor1"> None</label><br>
+		<input type="radio" id="outdoor2" name="outdoor" value="small" {% if 'small' in data[0][16]%}checked{% endif %}>
+		<label for="outdoor2"> Small</label><br>
+		<input type="radio" id="outdoor3" name="outdoor" value="medium" {% if 'medium' in data[0][16]%}checked{% endif %}>
+		<label for="outdoor3"> Medium</label><br>
+		<input type="radio" id="outdoor4" name="outdoor" value="large" {% if 'large' in data[0][16]%}checked{% endif %}>
+		<label for="outdoor4"> Large</label><br>
+		<br>
+		<label>Emergency transport:</label><br>
+		<input type="radio" id="transport1" name="transport" value="1" {% if '1' in data[0][17]|string %}checked{% endif %}>
+		<label for="transport1"> Yes</label><br>
+		<input type="radio" id="transport2" name="transport" value="0" {% if '0' in data[0][17]|string %}checked{% endif %}>
+		<label for="transport2"> No</label><br>
+		<br>
+		<label>Picture 1 upload: </label><input type="file" name="file1"><br><br>
+		<label>Picture 2 upload: </label><input type="file" name="file2"><br><br>
+		<label>Picture 3 upload: </label><input type="file" name="file3"><br><br>
+		<label>Picture 4 upload: </label><input type="file" name="file4"><br><br>
+		</td>
+    </tr>
+	<tr>
+		<td class="petsittersignup_button">
+		<input type="submit" value="Update" class="petsittersignup_submit">
+		</td>
+	</tr>
+</table>
+</div>
+</form>
+
+{% endblock %}

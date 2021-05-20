@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block the_content %}
+
+<form method="POST" action="/update_account">
+<div>
+<table class="signupbox">
+	<tr>
+		<td class="signup_topic" colspan="2">
+			<div class="topic_div">Modify Account Details</div>
+		</td>
+	</tr>
+    <tr>
+        <td class="signup_left">
+		<label>Your Email:</label><br>
+		<label>Title:</label><br>
+		<label>First Name:</label><br>
+		<label>Surname:</label><br>
+		<label>Date of Birth:</label><br>
+		<label>Contact Number:</label><br>
+		<label>Address:</label><br>
+		</td>
+		<td class ="signup_right">
+		<input type="text" id="email" name="email" value="{{ email }}" disabled><br>
+		<select name="title" id="title">
+			{% if email and data[0][2] %}	
+				{% if "Mrs" in data[0][2] %}
+					<option value="Mr">Mr</option>
+					<option value="Mrs" selected>Mrs</option>
+					<option value="Ms">Ms</option>
+					<option value="Miss">Miss</option>
+				{% elif "Ms" in data[0][2] %}
+					<option value="Mr">Mr</option>
+					<option value="Mrs">Mrs</option>
+					<option value="Ms" selected>Ms</option>
+					<option value="Miss">Miss</option>
+				{% elif "Miss" in data[0][2] %}
+					<option value="Mr">Mr</option>
+					<option value="Mrs">Mrs</option>
+					<option value="Ms">Ms</option>
+					<option value="Miss" selected>Miss</option>
+				{% else %}
+					<option value="Mr" selected>Mr</option>
+					<option value="Mrs">Mrs</option>
+					<option value="Ms">Ms</option>
+					<option value="Miss">Miss</option>
+				{% endif %}	
+			{% else %}
+				<option value="Mr">Mr</option>
+				<option value="Mrs">Mrs</option>
+				<option value="Ms">Ms</option>
+				<option value="Miss">Miss</option>
+			{% endif %}
+		</select><br>
+		<input type="text" id="fname" name="fname" pattern="[a-zA-Z ]{2,}" title="at less 2 characters with combination of a-z A-Z" value="{{ data[0][0] }}" required><br>
+		<input type="text" id="sname" name="sname" pattern="[a-zA-Z\s]{2,}" title="at less 2 characters with combination of a-z A-Z" value="{{ data[0][1] }}" required><br>
+		<input type="date" id="dob" name="dob" value="{{ data[0][3] }}"><br>
+		<input type="text" id="phone" name="phone" value="{{ data[0][5] }}"><br>
+		<input type="text" id="address" name="address" value="{{ data[0][4] }}"><br>
+		</td>
+	</tr>
+	<tr>
+		<td class="signup_button" colspan="2">
+		<input type="submit" value="Update" class="signup_submit">
+		</td>
+	</tr>
+</table>
+</div>
+</form>
+{% endblock %}

@@ -5,31 +5,33 @@
 
         <title>{{ the_title }}</title>
         <link rel="stylesheet" href="/static/css/style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     </head>
     <body>
 		
-		<div class="heading">
-            {{ the_opening_title }}
-        </div>
-        
-		<div class="top">
-            {% block the_menu %}
+		<div class="frame">
+		<header>
+		<img src="/static/images/logo.png" width="300" height="115">
+		</header>
+		<nav class="top">
+			{% block the_menu %}
 				{% if session.get('user') %}
 					<div><a href="/">Home</a> | <a href="/viewaccount">Your Account</a> | <a href="/signuppetsitter">be a pet sitter</a> | <a href="/logout">Logout</a></div>
 				{% else %}
 					<div><a href="/">Home</a> | <a href="/loginpage">Login</a> | <a href="/signup">Create an new account</a> | <a href="/signuppetsitter">be a pet sitter</a><div>
 				{% endif %}
 			{% endblock the_menu%}
-        </div>
-        
-        <div class="middle">
-            {% block the_content %}
+		</nav>
+		<section>
+			{% block the_content %}
             {% endblock the_content %}
-        </div>
-        <div class="top"><a href="#top"> &#8673; Back to top</a></div>
-        <div class="bottom">
-            Copyright 2021 &#169; Chi Ieong Ng C00223421.
-        </div>
+			
+		</section>
+		<nav class="bottom"><p class="go_top"><a href="#top"> &#8673; Back to top</a></p></nav>
+		<footer>
+			
+			Copyright 2021 &#169; Chi Ieong Ng C00223421.
+		</footer>
     </body>
 </html>

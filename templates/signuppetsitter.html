@@ -1,18 +1,31 @@
 {% extends "base.html" %}
 
 {% block the_content %}
-
+<script>
+		//source: https://www.studentstutorial.com/jquery/onclick-checkbox-show-textbox.php
+		$(document).ready(function(){
+			$("input[type='checkbox']").change(function(){
+				if($(this).val()=="other")
+				{
+					$("#other").show();
+				}
+				else
+				{
+					$("#other").hide(); 
+				}
+			});
+		});
+</script>
 <form method="POST" action="/signuppetsitterform">
 <div>
-<table class="showbox">
+<table class="petsittersignupbox">
 	<tr>
-		<td class="topic">
-			Sign up Pet sitter account
-			<hr>
+		<td class="petsittersignup_topic">
+			<div class="topic_div">Sign up Pet sitter account</div>
 		</td>
 	</tr>
     <tr>
-        <td class="signuppetsitter_form">
+        <td class="petsittersignup_form">
 		<label>Pet Sitter Name:</label><br>
 		<input type="text" id="petsittername" name="petsittername" required><br>
 		<br>
@@ -25,6 +38,7 @@
 		<label>Country:</label><br>
 		<select name="country" id="country" required>
 		<option value="ireland">Ireland</option>
+		<option value="United Kingdom" disabled>United Kingdom</option>
 		</select><br>
 		<br>
 		<label>City:</label><br>
@@ -54,7 +68,6 @@
 		<br>
 		<label>Number of pets that you can be watched at one time:</label><br>
 		<select name="numofpet" id="numofpet" required>
-		<option value="0">No set</option>
 		<option value="1">1</option>
 		<option value="2">2</option>
 		<option value="3">3</option>
@@ -82,26 +95,6 @@
 		<label for="type7"> Reptile</label><br>
 		<input type="checkbox" id= "type8" value="other"><label for="type8"> Other </label>
 		<input style="display:none;" type="text" name="type[]" id="other">
-		
-		
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		
-		<script>
-		//source: https://www.studentstutorial.com/jquery/onclick-checkbox-show-textbox.php
-		$(document).ready(function(){
-			$("input[type='checkbox']").change(function(){
-				if($(this).val()=="other")
-				{
-					$("#other").show();
-				}
-				else
-				{
-					$("#other").hide(); 
-				}
-			});
-		});
-		</script>
-		
 		<br><br>
 		<label>Accepted Pet size:</label><br>
 		<input type="checkbox" id="size1" name="size[]" value="1-5kg">
@@ -140,8 +133,8 @@
 		</td>
     </tr>
 	<tr>
-		<td class="viewpetbnbbutton">
-		<input type="submit" value="Submit" class="signup_submit">
+		<td class="petsittersignup_button">
+		<input type="submit" value="Submit" class="petsittersignup_submit">
 		</td>
 	</tr>
 </table>

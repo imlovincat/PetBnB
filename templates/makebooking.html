@@ -1,14 +1,27 @@
 {% extends "base.html" %}
 
 {% block the_content %}
+<script>
+$(document).ready(function () {
+    $('#checkBtn').click(function() {
+      checked = $("input[type=checkbox]:checked").length;
+      if(!checked) {
+        alert("type of pet at least check one");
+        return false;
+      }
+    });
+});
+</script>
 <div>
-<p>Enter your booking details</p>
 <form method="POST" action="/makebookingform/{{ data[0][2] }}">
-<table class = "showbox">
+<table class = "makebookingbox">
 	<tr>
-		<td class="makebooking_photo" rowspan="3"><img src="/static/images/petsitter.png" width="100" height="100"></td>
+		<td class="signup_topic">
+			<div class="topic_div">Make a new booking</div>
+		</td>
+	</tr>
+	<tr>
 		<td class="makebooking_petsittername">{{ data[0][2] }}</td>
-		
 	</tr>
 	<tr>
 		<td class="makebooking_location">Location: {{ data[0][8] }},{{ data[0][7] }},{{ data[0][6] }},{{ data[0][5] }}</td>
@@ -17,7 +30,7 @@
 		<td class="makebooking_price" >€{{ data[0][10] }}/per night</td>
 	</tr>
     <tr>
-        <td colspan="2" class="makebooking_form">
+        <td class="makebooking_form">
 		<label>Title:</label><br>
 		<select name="title" id="title">
 		{% if session.get('user') and customerdata[0][3] %}	
@@ -87,8 +100,8 @@
 		</td>
     </tr>
 	<tr>
-		<td class="makebooking_button" colspan="2">
-		<input class="makebooking_submit" type="submit" value="Submit">
+		<td class="makebooking_button">
+		<input class="makebooking_submit" type="submit" value="Submit" id="checkBtn">
 		</td>
 	</tr>
 </table>
