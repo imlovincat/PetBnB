@@ -3,23 +3,28 @@
 {% block the_content %}
 <form method="POST" action="/payment">
 <div>
-<table>
+<table class="bankcardbox">
+	<tr>
+		<td class="signup_topic" colspan="2">
+			<div class="topic_div">Bank card payment</div>
+		</td>
+	</tr>
     <tr>
-        <td>
+        <td class="bankcarddetails">
 		<label>Card Number:</label>
 		<br>
-		<input type="text" id="number" name="number" value="4007000000027" required>
+		<input type="text" id="number" name="number" value="4007000000027" readonly required>
 		<br>
 		<label>Expiration date:</label><br>
-		<input type="month" id="expiration_date" name="expiration_date" value = "2050-01" required>
+		<input type="month" id="expiration_date" name="expiration_date" value = "2050-01" readonly required>
 		<br>
 		<label>Code:</label><br>
-		<input type="text" id="code" name="code" value="123" required><br><br>
+		<input type="text" id="code" name="code" value="123" readonly required><br><br>
 		</td>
     </tr>
 	<tr>
-		<td>
-		<input type="submit" value="Submit">
+		<td class="bankcardbottom">
+		<input type="submit" value="Pay now" class="bankcardbutton">
 		<input type="hidden" id="payment" name="payment" value="{{ data['payment'] }}">
 		<input type="hidden" id="petsitter" name="petsitter" value="{{ petsitter[0][2] }}">
 		<input type="hidden" id="title" name="title" value="{{ data['title'] }}">

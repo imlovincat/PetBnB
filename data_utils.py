@@ -12,10 +12,32 @@ connection = {
 
 
 def customer_signup_data(data):
-    try: 
+    try:
+        newstring = "'" + data['email'] + "','" + data['password'] + "'"
+        SQL = """ INSERT INTO customer (email,password"""
+        if data['fname'] != '':
+            SQL += ",fname"
+            newstring += ",'" + data['fname'] + "'"
+        if data['sname'] != '':
+            SQL += ",sname"
+            newstring += ",'" + data['sname'] + "'"
+        if data['title'] != '':
+            SQL += ",title"
+            newstring += ",'" + data['title'] + "'"
+        if data['dob'] != '':
+            SQL += ",dateOfBirth"
+            newstring += ",'" + data['dob'] + "'"
+        if data['address'] != '':
+            SQL += ",address"
+            newstring += ",'" + data['address'] + "'"
+        if data['phone'] != '':
+            SQL += ",contactNumber"
+            newstring += ",'" + data['phone'] + "'"
+        SQL += ") VALUES (" + newstring + ")"
+        
+        print(SQL)
         with DBcm.UseDatabase(connection) as cursor:
-            SQL = """ INSERT INTO customer (email,password) VALUES (%s, %s) """
-            cursor.execute(SQL, (data["email"], data["password"]),)
+            cursor.execute(SQL)
     except:
         print("Error")
 
@@ -139,7 +161,9 @@ def petsitter_signup_data(user,data):
         
         if data.getlist('service[]'): petservice = format(data.getlist('service[]'))
         else: petservice = "[]"
-        if data.getlist('type[]'): pettype = format(data.getlist('type[]'))
+        if data.getlist('type[]'):
+            pettype = format(data.getlist('type[]'))
+            pettype = pettype.replace(", ''","")
         else: pettype = "[]"
         if data.getlist('size[]'): petsize = format(data.getlist('size[]'))
         else: petsize = "[]"
@@ -427,8 +451,83 @@ def check_email_exists_data():
             return data
     except:
         print("Error")
+        
+def check_duplicated_email_data(email):
+    try:
+        with DBcm.UseDatabase(connection) as cursor:
+            SQL = """SELECT COUNT(*) FROM customer WHERE email = %s"""
+            cursor.execute(SQL,(email,),)
+            data = cursor.fetchall()
+            if data[0][0] == 0:
+                return True
+            else: return False
+    except:
+        print("Error")
 
 
+def update_account_data(data,email):
+    try:
+        title = data['title']
+        fname = data['fname']
+        sname = data['sname']
+        dateOfBirth = str(data['dob'])
+        contactNumber = data['phone']
+        address = data['address']
+        with DBcm.UseDatabase(connection) as cursor:
+                    SQL = """UPDATE customer
+                             SET title = %s, fname = %s, sname = %s, dateOfBirth = %s, contactNumber = %s, address = %s
+                             WHERE email = %s"""
+                    cursor.execute(SQL, (title, fname, sname, dateOfBirth, contactNumber, address, email,),) 
+    except:
+        print("Error")
+        
+def update_petsitter_account_data(data,email):
+
+        user = email
+        petsittername = data['petsittername']
+        email = data['email']
+        phone = data['phone']
+        country = data['country']
+        city = data['city']
+        town = data['town']
+        address = data['street']
+        description = data['description']
+        price = data['price']
+        if data.getlist('service[]'): petservice = format(data.getlist('service[]'))
+        else: petservice = "[]"
+        petnums = data['numofpet']
+        if data.getlist('type[]'): 
+            pettype = format(data.getlist('type[]'))
+            pettype = pettype.replace(", ''","")
+        else: pettype = "[]"
+        if data.getlist('size[]'): petsize = format(data.getlist('size[]'))
+        else: petsize = "[]"
+        housetype = data['house']
+        outdoor = data['outdoor']
+        transport = data['transport']
+        with DBcm.UseDatabase(connection) as cursor:
+                    SQL = """UPDATE petsitter 
+                             INNER JOIN customer ON (petsitter.customerid = customer.id)
+                             SET 
+                             petsitter.email = %s,
+                             petsitter.phone = %s,
+                             petsitter.country = %s,
+                             petsitter.city = %s,
+                             petsitter.town = %s,
+                             petsitter.address = %s,
+                             petsitter.description = %s,
+                             petsitter.price = %s,
+                             petsitter.petservice = %s,
+                             petsitter.petnums = %s,
+                             petsitter.pettype = %s,
+                             petsitter.petsize = %s,
+                             petsitter.housetype = %s,
+                             petsitter.outdoor = %s,
+                             petsitter.transport = %s
+                             WHERE petsitter.petsittername = %s AND customer.email = %s"""
+                    cursor.execute(SQL, (email,phone,country,city,town,address,description,price,petservice,petnums,pettype,petsize,housetype,outdoor,transport,petsittername,user,),) 
+
+    
 def list_pettype_data():
     try:
         with DBcm.UseDatabase(connection) as cursor:

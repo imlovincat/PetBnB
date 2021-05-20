@@ -4,21 +4,21 @@
 
 <div>
 <form method="POST" action="/loginform">
-<table>
+<table class="loginbox">
+	<tr>
+		<td class="login_topic">
+		<div class="topic_div">Log in</div>
+		</td>
+	</tr>
     <tr>
-        <td>
-
-		<label>Your Email:</label><br>
-		<input type="email" id="email" name="email" required><br>
-		<label>Password:</label><br>
-		<input type="password" id="password" name="password" required><br><br>
-		
-
+        <td class="login_form">
+		<label>Your Email:</label><input type="email" id="email" name="email" class="login_field" required><br>
+		<label>Password:</label><input type="password" id="password" name="password" class="login_field" required><br><br>
 		</td>
     </tr>
 	<tr>
-		<td>
-		<input type="submit" value="Submit">
+		<td class="loginbutton">
+		<input type="submit" value="Continue" class="login_submit">
 		</td>
 	</tr>
 

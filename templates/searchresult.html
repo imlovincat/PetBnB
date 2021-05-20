@@ -3,70 +3,7 @@
 {% block the_content %}
 
 {% block the_result %}
-<div>
-	<form method="POST" action="/searchform">
-<table class="searchbox">
-	<tr>
-		<td colspan="2" class="searchbox_top">
-		I'm looking for
-		</td>
-	</tr>
-    <tr>
-        <td class="searchbox_left">
-		<label>Country: </label>
-		</td>
-		<td class="searchbox_right">
-		<select id="country" name="country">
-		<option value="Ireland">Ireland</option>
-		<option value="United Kingdom">United Kingdom</option>
-		</select>
-		<input type="text" id="location" name="location" placeholder="Location, Pet Sitter Name">
-		</td>
-    </tr>
-	<tr>
-		<td class="searchbox_left">
-			<label> Pet Types: </label>
-		</td>
-		<td class="searchbox_right">
-			<select id="numofpet" name="numofpet" onchange="myFunction()">
-			<option value="">Nums</option>
-			<option value="1">1</option>
-			<option value="2">2</option>
-			<option value="3">3</option>
-			<option value="4">4+</option>
-			</select>
-		
-			<select id="pettype1" name="pettype1">
-			<option value="">Pet Type 1</option>
-			{% for row in pettype %}
-			<option value="{{ row }}">{{ row }}</option>
-			{% endfor %}
-			</select>
-			
-			<select id="pettype2" name="pettype2" style="display:none;">
-			<option value="">Pet Type 2</option>
-			{% for row in pettype %}
-			<option value="{{ row }}">{{ row }}</option>
-			{% endfor %}
-			</select>
-			
-			<select id="pettype3" name="pettype3" style="display:none;">
-			<option value="">Pet Type 3</option>
-			{% for row in pettype %}
-			<option value="{{ row }}">{{ row }}</option>
-			{% endfor %}
-			</select>
-			
-			<select id="pettype4" name="pettype4" style="display:none;">
-			<option value="">Pet Type 4</option>
-			{% for row in pettype %}
-			<option value="{{ row }}">{{ row }}</option>
-			{% endfor %}
-			</select>
-
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		
-			<script>
+<script>
 			function myFunction(){
 				if(document.getElementById("numofpet").value == "2")
 				{
@@ -93,28 +30,103 @@
 					$("#pettype4").hide(); 
 				}
 			};
-			</script>
+</script>
+
+<div>
+	<form method="POST" action="/searchform">
+<table class="searchbox">
+	<tr>
+		<td colspan="2" class="search_top">
+		I'm looking for
 		</td>
 	</tr>
-
-	
+    <tr>
+        <td class="search_left">
+		<label>Country: </label>
+		</td>
+		<td class="search_right">
+		<select id="country" name="country" class="selectbox">
+		<option value="Ireland">Ireland</option>
+		<option value="United Kingdom" disabled>United Kingdom</option>
+		</select>
+		</td>
+    </tr>
 	<tr>
-		<td colspan="2" class="searchbox_bottom">
+		<td class="search_left">
+		<label>Location: </label>
+		</td>
+		<td class="search_right">
+		<input type="text" id="location" name="location" placeholder="Location or Pet Sitter" class="searchfield">
+		</td>
+	</td>
+	<tr>
+		<td class="search_left">
+		<label>Number of Pet: </label>
+		</td>
+		<td class="search_right">
+			<select id="numofpet" name="numofpet" onchange="myFunction()" class="selectbox">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4+</option>
+			</select>	
+		</td>
+	</tr>
+	<tr>
+		<td class="search_left">
+		<label>Type of Pet:</label>
+		</td>
+		<td class="search_right">
+		
+			<select id="pettype1" name="pettype1" class="selectbox">
+			<option value="">Any</option>
+			{% for row in pettype %}
+			<option value="{{ row }}">{{ row }}</option>
+			{% endfor %}
+			</select>
+			
+			<select id="pettype2" name="pettype2" style="display:none;" class="selectbox">
+			<option value="">None</option>
+			{% for row in pettype %}
+			<option value="{{ row }}">{{ row }}</option>
+			{% endfor %}
+			</select>
+			
+			<select id="pettype3" name="pettype3" style="display:none;" class="selectbox">
+			<option value="">None</option>
+			{% for row in pettype %}
+			<option value="{{ row }}">{{ row }}</option>
+			{% endfor %}
+			</select>
+			
+			<select id="pettype4" name="pettype4" style="display:none;" class="selectbox">
+			<option value="">None</option>
+			{% for row in pettype %}
+			<option value="{{ row }}">{{ row }}</option>
+			{% endfor %}
+			</select>
+		</td>
+	</td>
+	<tr>
+		<td colspan="2" class="search_bottom">
 		<input type="submit" value="Search" class="search_button">
 		</td>
 	</tr>
 </table>
 </form>
-<br>
-<br>
+
 <br>
 
 	{% if the_num == 0 %}
-		<p>NO FOUND</p>
+		<table class="nofound">
+			<tr>
+				<td>No suitable search results,<br>please enter other criteria to search again!</td>
+			</tr>
+		</table>
 	{% else %}
 		<table>
 			<tr>
-				<td>Result: {{ the_num }}</td>
+				<td class="result">Eligible pet service: {{ the_num }}</td>
 			</tr>
 		</table>
 		{% for row in data %}

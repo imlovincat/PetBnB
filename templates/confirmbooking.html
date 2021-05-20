@@ -2,13 +2,15 @@
 
 {% block the_content %}
 <div>
-<p>Choose Your Payment</p>
 <form method="POST" action="/confirmbookingform">
-<table class = "showbox">
+<table class = "confirmbookingbox">
 	<tr>
-		<td class="confirmbooking_photo" rowspan="2"><img src="/static/images/petsitter.png" width="100" height="100"></td>
+		<td class="signup_topic" colspan="2">
+			<div class="topic_div">Choose your payment method</div>
+		</td>
+	</tr>
+	<tr>
 		<td class="confirmbooking_petsittername">{{ petsitter[0][2] }}</td>
-		
 	</tr>
 	<tr>
 		<td class="confirmbooking_location">Location: {{ petsitter[0][8] }},{{ petsitter[0][7] }},{{ petsitter[0][6] }},{{ petsitter[0][5] }}</td>

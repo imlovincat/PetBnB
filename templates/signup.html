@@ -15,10 +15,10 @@ function Validate() {
 
 <form method="POST" action="/signupform">
 <div>
-<table class="showbox">
+<table class="signupbox">
 	<tr>
-		<td class="boxtopic" colspan="2">
-			Create Your Account
+		<td class="signup_topic" colspan="2">
+			<div class="topic_div">Create Your Account</div>
 		</td>
 	</tr>
     <tr>
@@ -34,24 +34,56 @@ function Validate() {
 		<label>Repeat password:</label><br>
 		</td>
 		<td class ="signup_right">
-		<input type="email" id="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$" required><br>
+		<input type="email" id="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$" value="{% if data['email'] %}{{ data['email'] }}{% endif %}"	required>
+			{% if message1 %}
+					<p class="flashes">{{ message1 }}</p>
+			{% endif %}
+		<br>
 		<select name="title" id="title">
+		{% if data['title'] %}
+			{% if 'Mrs' in data['title'] %}
+				<option value="Mr">Mr</option>
+				<option value="Mrs" selected>Mrs</option>
+				<option value="Ms">Ms</option>
+				<option value="Miss">Miss</option>
+			{% elif 'Ms' in data['title'] %}
+				<option value="Mr">Mr</option>
+				<option value="Mrs">Mrs</option>
+				<option value="Ms" selected>Ms</option>
+				<option value="Miss">Miss</option>
+			{% elif 'Miss' in data['title'] %}
+				<option value="Mr">Mr</option>
+				<option value="Mrs">Mrs</option>
+				<option value="Ms">Ms</option>
+				<option value="Miss" selected>Miss</option>
+			{% else %}
+				<option value="Mr" selected>Mr</option>
+				<option value="Mrs">Mrs</option>
+				<option value="Ms">Ms</option>
+				<option value="Miss">Miss</option>
+			{% endif %}
+		{% else %}
 			<option value="Mr" selected>Mr</option>
 			<option value="Mrs">Mrs</option>
 			<option value="Ms">Ms</option>
 			<option value="Miss">Miss</option>
+		{% endif %}
 		</select><br>
-		<input type="text" id="fname" name="fname" pattern="[a-zA-Z ]{2,}" title="at less 2 characters with combination of a-z A-Z" required><br>
-		<input type="text" id="sname" name="sname" pattern="[a-zA-Z\s]{2,}" title="at less 2 characters with combination of a-z A-Z" required><br>
-		<input type="date" id="dob" name="dob"><br>
-		<input type="text" id="phone" name="phone"><br>
-		<input type="text" id="address" name="address"><br>
+		<input type="text" id="fname" name="fname" pattern="[a-zA-Z ]{2,}" title="at less 2 characters with combination of a-z A-Z" value="{% if data['fname'] %}{{ data['fname'] }}{% endif %}"><br>
+		<input type="text" id="sname" name="sname" pattern="[a-zA-Z\s]{2,}" title="at less 2 characters with combination of a-z A-Z" value="{% if data['sname'] %}{{ data['sname'] }}{% endif %}"><br>
+		<input type="date" id="dob" name="dob" value="{% if data['dob'] %}{{ data['dob'] }}{% endif %}"><br>
+		<input type="text" id="phone" name="phone" value="{% if data['phone'] %}{{ data['phone'] }}{% endif %}"><br>
+		<input type="text" id="address" name="address" value="{% if data['address'] %}{{ data['address'] }}{% endif %}"><br>
 		<input type="password" id="password" name="password" pattern="[a-zA-Z0-9]{8,}" title="at less 8 characters and combination with a-z,A-Z,0-9" required><br>
-		<input type="password" id="repeatpassword" name="repeatpassword" pattern="[a-zA-Z0-9]{8,}" title="at less 8 characters and combination with a-z,A-Z,0-9" onchange="Validate()" required><br>
+		<input type="password" id="repeatpassword" name="repeatpassword" pattern="[a-zA-Z0-9]{8,}" title="at less 8 characters and combination with a-z,A-Z,0-9" onchange="Validate()" required>
+			{% if message2 %}
+					<p class="flashes">{{ message2 }}</p>
+			{% endif %}
+		<br>
 		</td>
 	</tr>
 	<tr>
-		<td class="viewpetbnbbutton" colspan="2">
+		<td class="signup_button" colspan="2">
 		<input type="submit" value="Submit" class="signup_submit">
 		</td>
 	</tr>
