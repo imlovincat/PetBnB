@@ -52,12 +52,12 @@ function completeButton() {
 			{% if "Pending" in data[0][0] %}
 				<button class="cancel" onclick="cancelButton()">Cancel Booking</button>
 				{% if checkin >= today %}
-					<button class="confirm" onclick="confirmBox()">Confirm Booking</button>
+					<button class="confirm" onclick="confirmButton()">Confirm Booking</button>
 				{% endif %}
 			{% elif "Confirmed" in data[0][0] %}
 				<button class="cancel" onclick="cancelButton()">Cancel Booking</button>
 				{% if today >= checkin %}
-					<button class="complete" onclick="completeBox()">Complete Booking</button>
+					<button class="complete" onclick="completeButton()">Complete Booking</button>
 				{% endif %}
 			{% endif %}
 		{% elif "customer" in accessType %}

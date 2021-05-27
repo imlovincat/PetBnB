@@ -2,18 +2,18 @@
 
 {% block the_content %}
 <script>
-		$(document).ready(function(){
-			$("input[type='checkbox']").change(function(){
-				if($(this).val()=="other")
-				{
-					$("#other").show();
-				}
-				else
-				{
-					$("#other").hide(); 
-				}
-			});
-		});
+$(document).ready(function(){
+	$("input[type='checkbox']").change(function(){
+		if($(this).val()=="other")
+		{
+			$("#other").show();
+		}
+		else
+		{
+			$("#other").hide(); 
+		}
+	});
+});
 </script>
 
 <form method="POST" action="/update_petsitter_account" enctype='multipart/form-data'>

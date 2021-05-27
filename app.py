@@ -342,19 +342,36 @@ def process_for_new_customer_signup_form():
             data = data,
         )
     
-    
-    
-
 @app.route("/signuppetsitterform", methods=["POST"])
 def process_for_new_petsitter_signup_form():
     data = request.form
     petsittername = data['petsittername']
-    if check_duplicate_petsitter_data(petsittername):
+    print(data)
+    if data['type[]'] == '':
+        return render_template(
+            "signuppetsitter.html",
+            the_title="Project - PetBnB | Pet Sitter Sign up",
+            message1 = "at least check one!",
+            data = data,
+        )
+    elif data['size[]'] == '':
+        return render_template(
+            "signuppetsitter.html",
+            the_title="Project - PetBnB | Pet Sitter Sign up",
+            message2 = "at least check one!",
+            data = data,
+        )
+    elif check_duplicate_petsitter_data(petsittername):
         petsitter_signup_data(session['user'],data)
-        newURL = "/upload/" + petsittername
+        newURL = "/picture/" + petsittername
         return redirect(newURL)
     else: 
-        return redirect('/signupetsitter')
+        return render_template(
+            "signuppetsitter.html",
+            the_title="Project - PetBnB | Pet Sitter Sign up",
+            message3 = "name used!",
+            data = data,
+        )
 
 @app.route("/loginform", methods=["POST"])
 def process_for_customer_login_form():

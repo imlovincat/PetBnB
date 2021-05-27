@@ -2,19 +2,18 @@
 
 {% block the_content %}
 <script>
-		//source: https://www.studentstutorial.com/jquery/onclick-checkbox-show-textbox.php
-		$(document).ready(function(){
-			$("input[type='checkbox']").change(function(){
-				if($(this).val()=="other")
-				{
-					$("#other").show();
-				}
-				else
-				{
-					$("#other").hide(); 
-				}
-			});
-		});
+$(document).ready(function(){
+	$("input[type='checkbox']").change(function(){
+		if($(this).val()=="other")
+		{
+			$("#other").show();
+		}
+		else
+		{
+			$("#other").hide(); 
+		}
+	});
+});
 </script>
 <form method="POST" action="/signuppetsitterform">
 <div>
@@ -26,7 +25,11 @@
 	</tr>
     <tr>
         <td class="petsittersignup_form">
-		<label>Pet Sitter Name:</label><br>
+		<label>Pet Sitter Name:</label>
+			{% if message3 %}
+					<p class="flashes">{{ message3 }}</p>
+			{% endif %}
+		<br>
 		<input type="text" id="petsittername" name="petsittername" required><br>
 		<br>
 		<label>Contact email address:</label><br>
@@ -78,8 +81,12 @@
 		<option value="8">8</option>
 		</select><br>
 		<br>
-		<label>Accepted Pet Types:</label><br>
-		<input type="checkbox" id="type1" name="type[]" value="Dog">
+		<label>Accepted Pet Types:</label>
+		{% if message1 %}
+			<p class="flashes">{{ message1 }}</p>
+		{% endif %}
+		<br>
+		<input type="checkbox" id="type1" name="type[]" value="Dog" checked>
 		<label for="type1"> Dog</label><br>
 		<input type="checkbox" id="type2" name="type[]" value="Cat">
 		<label for="type2"> Cat</label><br>
@@ -96,8 +103,12 @@
 		<input type="checkbox" id= "type8" value="other"><label for="type8"> Other </label>
 		<input style="display:none;" type="text" name="type[]" id="other">
 		<br><br>
-		<label>Accepted Pet size:</label><br>
-		<input type="checkbox" id="size1" name="size[]" value="1-5kg">
+		<label>Accepted Pet size:</label>
+		{% if message2 %}
+				<p class="flashes">{{ message2 }}</p>
+		{% endif %}
+		<br>
+		<input type="checkbox" id="size1" name="size[]" value="1-5kg" checked>
 		<label for="size1"> 1-5kg</label><br>
 		<input type="checkbox" id="size2" name="size[]" value="6-10kg">
 		<label for="type2"> 6-10kg</label><br>
