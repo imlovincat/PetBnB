@@ -1,3 +1,8 @@
+# Student Name: Chi Ieong Ng
+# Student ID: C00223421
+# Y3 Project - PetBnB
+# Start Date: 22/Mar/2021
+
 import DBcm
 from datetime import datetime,date
 from random import seed
