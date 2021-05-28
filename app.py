@@ -1,17 +1,16 @@
 from flask import Flask, flash,render_template, request, session, redirect,url_for, make_response, jsonify
 from data_utils import *
 from datetime import timedelta, datetime, date
+from werkzeug.utils import secure_filename
 import os.path
 import os
 from os import path
-
 import time
 import models
 import paymentprocessing
 
 
-from werkzeug.utils import secure_filename
-import cv2
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
